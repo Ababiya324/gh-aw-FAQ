@@ -1,7 +1,6 @@
 ---
 on:
-  schedule:
-    - cron: "0 0 * * 1"    # Weekly on Monday at 00:00 UTC
+  schedule: 'weekly on monday'
   workflow_dispatch:
     inputs:
       lookback-days:
