@@ -23,26 +23,10 @@ tools:
   web-fetch:
   cache-memory:
 
-mcp-servers:
-  slack:
-    command: npx
-    args: ["-y", "@modelcontextprotocol/server-slack"]
-    env:
-      SLACK_BOT_TOKEN: "${{ secrets.SLACK_BOT_TOKEN }}"
-      SLACK_TEAM_ID: "${{ vars.SLACK_TEAM_ID }}"
-    allowed:
-      - "*"
-    # Requires a SLACK_BOT_TOKEN repo secret with channels:history, channels:read,
-    # and search:read scopes, and a SLACK_TEAM_ID repo variable. If either is
-    # unset, treat Slack as an unreachable channel rather than a failure
-    # (see "Channel Availability" below).
-
 network:
   allowed:
     - defaults
     - github
-    - "slack.com"
-    - "*.slack.com"
     - "*.eclipse.org"
 
 safe-outputs:
@@ -59,8 +43,6 @@ safe-outputs:
     - github.com
     - "*.github.com"
     - "*.github.io"
-    - slack.com
-    - "*.slack.com"
     - "*.eclipse.org"
 
 concurrency:
@@ -87,8 +69,6 @@ don't require recompiling.
 - **FAQ path**: `content/asciidoc-pages/docs/faq/index.adoc`
 - **GitHub issue repositories** (reviewed directly): `adoptium/adoptium-support`
 - **Organization issue filters**: organization `adoptium`, label `PMC-agenda`
-- **Slack channels**: `support`, `community`, `general`
-  (workspace set via the `SLACK_TEAM_ID` repo variable and `SLACK_BOT_TOKEN` repo secret)
 - **Mailing list archive URLs**: `https://accounts.eclipse.org/mailing-list/adoptium-pmc`
 - **Lookback window for channels with no stored watermark**: 7 days
   (overridable per manual run via the `lookback-days` workflow_dispatch input)
@@ -100,9 +80,9 @@ whichever channels are listed in Configuration above:
 
 - **GitHub issues** — from the specific repositories and the organization
   label filters listed above
-- **Slack** — the specific channels listed above, within the configured
-  workspace
 - **Mailing lists** — the archive URLs listed above
+
+Slack is not currently included as a channel; it can be added later if needed.
 
 The project's FAQ lives at the configured FAQ path inside the configured FAQ
 repository, and is treated as the single source of truth to compare new
@@ -117,10 +97,10 @@ On each run, perform the following steps and produce exactly one output.
 
 Read the Configuration section above. Using `cache-memory`, load the stored
 watermark (the timestamp of the newest item already processed) for every
-individual channel: each GitHub repository, each organization filter, each
-Slack channel, and each mailing list URL. If a channel has no stored
-watermark, review the configured lookback window (or the `lookback-days`
-input if this run was triggered manually) of its history.
+individual channel: each GitHub repository, each organization filter, and
+each mailing list URL. If a channel has no stored watermark, review the
+configured lookback window (or the `lookback-days` input if this run was
+triggered manually) of its history.
 
 ### 2. Fetch the live FAQ
 
@@ -138,10 +118,6 @@ continue with the rest.
 - **Organization issue filters**: for each configured organization/label
   pair, search the organization for issues matching that label, across all
   its repositories.
-- **Slack**: if the Slack tool is reachable, pull messages and threads since
-  the watermark for each configured channel, treating each thread (root +
-  replies) as a unit. If the Slack tool is unavailable or a call fails,
-  record Slack as skipped with the reason.
 - **Mailing lists**: for each configured URL, fetch the archive and extract
   subject, date, sender, and body on a best-effort basis (archive software
   varies by project). If unreachable or empty, record why.
@@ -149,8 +125,8 @@ continue with the rest.
 ### 4. Cluster and classify
 
 Cluster semantically similar questions across all channels — a question
-asked once on Slack and twice on GitHub is one cluster, not three. Compare
-each cluster against the current FAQ and classify it as:
+asked once in a mailing list thread and twice on GitHub is one cluster, not
+three. Compare each cluster against the current FAQ and classify it as:
 
 - Already adequately covered
 - Existing entry should be expanded or clarified
@@ -165,7 +141,7 @@ community speculation.
 
 For each candidate cluster, draft a complete, paste-ready FAQ entry matching
 the formatting style of the existing FAQ, with source links back to the
-originating GitHub issues, Slack threads, or mailing list messages.
+originating GitHub issues or mailing list messages.
 
 ### 6. Update cache-memory
 
