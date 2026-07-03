@@ -1,190 +1,179 @@
 ---
+description: "Continuous multi-channel review of community questions with proposed Adoptium FAQ updates."
 on:
-  schedule: 'weekly on monday'
+  schedule: daily             # fuzzy daily schedule; compiler picks a distributed time
   workflow_dispatch:
-    inputs:
-      lookback-days:
-        description: "Days of history to review for any channel with no stored watermark"
-        required: false
-        type: number
-
+engine:
+  id: copilot
+  model: gpt-4o               # claude models are not enabled for this Copilot account
 permissions:
   contents: read
   issues: read
   pull-requests: read
   discussions: read
-  copilot-requests: write
-
-tools:
-  github:
-    toolsets: [context, repos, issues, pull_requests, discussions]
-    min-integrity: none
-  web-fetch:
-  cache-memory:
-
 network:
   allowed:
     - defaults
     - github
-    - "*.eclipse.org"
-
+    - node                    # npx fetches the Slack MCP server
+    - "slack.com"
+    - "*.slack.com"
+# Deterministic pre-fetch: runs outside the firewall sandbox, before the agent.
+# Pulls the FAQ + GitHub questions with plain curl and writes them to files, so the
+# agent spends inference on judgement (cluster/compare/draft), not on fetching.
+steps:
+  - name: Pre-fetch FAQ and GitHub sources
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    run: |
+      set -euo pipefail
+      DIR=/tmp/gh-aw/agent
+      mkdir -p "$DIR"
+      SINCE=$(date -u -d '7 days ago' +%Y-%m-%dT%H:%M:%SZ)
+      echo "$SINCE" > "$DIR/window-start.txt"
+      # Live FAQ
+      curl -sSL \
+        "https://raw.githubusercontent.com/adoptium/adoptium.net/main/content/asciidoc-pages/docs/faq/index.adoc" \
+        -o "$DIR/faq.adoc"
+      # adoptium-support issues (open + closed) updated in the window, authenticated
+      # (5000/hr limit instead of 60). Headers as an array so the token survives
+      # word splitting.
+      GH_API=(-H "Accept: application/vnd.github+json" -H "Authorization: Bearer $GH_TOKEN")
+      curl -sSL "${GH_API[@]}" \
+        "https://api.github.com/repos/adoptium/adoptium-support/issues?state=open&since=$SINCE&per_page=100" \
+        -o "$DIR/support-open.json"
+      curl -sSL "${GH_API[@]}" \
+        "https://api.github.com/repos/adoptium/adoptium-support/issues?state=closed&since=$SINCE&per_page=100" \
+        -o "$DIR/support-closed.json"
+      # Org-wide PMC-agenda issues via the search API (reads .items)
+      curl -sSL "${GH_API[@]}" \
+        "https://api.github.com/search/issues?q=org:adoptium+label:PMC-agenda+state:open&per_page=50" \
+        -o "$DIR/pmc-agenda.json"
+      # PMC mailing list archive (best effort; never fail the run)
+      curl -sSL "https://accounts.eclipse.org/mailing-list/adoptium-pmc" \
+        -o "$DIR/mailing-list.html" || echo "mailing list unavailable" > "$DIR/mailing-list.html"
+      echo "Pre-fetch complete:"; ls -la "$DIR"
+tools:
+  web-fetch:                  # fallback fetch if a pre-fetched file is missing
+  cache-memory:               # per-channel watermark across runs
+mcp-servers:
+  slack:
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-slack"]
+    env:
+      SLACK_BOT_TOKEN: "${{ secrets.SLACK_BOT_TOKEN }}"
+      SLACK_TEAM_ID: "${{ secrets.SLACK_TEAM_ID }}"
+    allowed:                  # read-only tools only (enforced at the gateway)
+      - slack_list_channels
+      - slack_get_channel_history
+      - slack_get_thread_replies
 safe-outputs:
   create-issue:
     title-prefix: "[faq-review] "
-    labels:
-      - documentation
-      - faq
-    max: 1
+    labels: [documentation, faq]
     expires: false
-  noop:
-    report-as-issue: false
-  allowed-domains:
-    - github.com
-    - "*.github.com"
-    - "*.github.io"
-    - "*.eclipse.org"
-
-concurrency:
-  group: faq-review
-  cancel-in-progress: true
-
-timeout-minutes: 30
 ---
 
-# FAQ Review Agent
+# Adoptium FAQ Review
 
-You are a documentation review agent for open source projects. Your job is to
-monitor community communication channels for recurring questions, compare
-them against the project's existing FAQ, and propose improvements as a single
-GitHub issue for maintainer review. This workflow is designed to be reused by
-any project — everything it needs is declared in the **Configuration**
-section below rather than fixed in the instructions. To reuse this workflow
-for a different project, edit only the Configuration section; body edits
-don't require recompiling.
+You review community questions across several channels and propose improvements to
+the **Adoptium FAQ**. You do **not** edit the FAQ directly; you produce a single
+GitHub issue with ready-to-apply proposals for maintainer review.
 
-## Configuration
+## Pre-fetched inputs (read these, do not re-fetch)
 
-- **FAQ repository**: `adoptium/adoptium.net`
-- **FAQ path**: `content/asciidoc-pages/docs/faq/index.adoc`
-- **GitHub issue repositories** (reviewed directly): `adoptium/adoptium-support`
-- **Organization issue filters**: organization `adoptium`, label `PMC-agenda`
-- **Mailing list archive URLs**: `https://accounts.eclipse.org/mailing-list/adoptium-pmc`
-- **Lookback window for channels with no stored watermark**: 7 days
-  (overridable per manual run via the `lookback-days` workflow_dispatch input)
+A deterministic step has already downloaded the data into `/tmp/gh-aw/agent/`. Read
+these files directly instead of making web requests:
 
-## Context
+- `faq.adoc` — the live FAQ. Parse its `==` question headings first, so every
+  comparison is against the current entries.
+- `support-open.json`, `support-closed.json` — `adoptium/adoptium-support` issues
+  (a JSON array). Review each item's `title`, `body`, and comments.
+- `pmc-agenda.json` — org-wide `PMC-agenda` issues. Read the `items` array.
+- `mailing-list.html` — PMC mailing list archive, or the text "mailing list
+  unavailable" if the fetch failed (then skip it and note so).
+- `window-start.txt` — the ISO 8601 start of the 7-day pre-fetch window.
 
-This agent tracks questions asked by end-users and contributors across
-whichever channels are listed in Configuration above:
+Only fall back to `web-fetch` if one of these files is missing or empty.
 
-- **GitHub issues** — from the specific repositories and the organization
-  label filters listed above
-- **Mailing lists** — the archive URLs listed above
+## FAQ format
 
-Slack is not currently included as a channel; it can be added later if needed.
+AsciiDoc. Each entry is a second-level heading plus prose:
 
-The project's FAQ lives at the configured FAQ path inside the configured FAQ
-repository, and is treated as the single source of truth to compare new
-questions against. You never edit it directly — you only ever propose
-changes for a human to merge.
+```asciidoc
+== How long is Eclipse Temurin supported?
 
-## Instructions
-
-On each run, perform the following steps and produce exactly one output.
-
-### 1. Load configuration and watermarks
-
-Read the Configuration section above. Using `cache-memory`, load the stored
-watermark (the timestamp of the newest item already processed) for every
-individual channel: each GitHub repository, each organization filter, and
-each mailing list URL. If a channel has no stored watermark, review the
-configured lookback window (or the `lookback-days` input if this run was
-triggered manually) of its history.
-
-### 2. Fetch the live FAQ
-
-Fetch the FAQ path from the FAQ repository and extract the existing questions
-and answers. Always use the latest version — never rely on a cached copy.
-
-### 3. Collect discussions from every configured channel
-
-Each channel is independent — if one fails or is unreachable, record why and
-continue with the rest.
-
-- **GitHub repositories**: for each configured repo, fetch open and closed
-  issues updated since that repo's watermark, plus all comments, following
-  pagination until exhausted.
-- **Organization issue filters**: for each configured organization/label
-  pair, search the organization for issues matching that label, across all
-  its repositories.
-- **Mailing lists**: for each configured URL, fetch the archive and extract
-  subject, date, sender, and body on a best-effort basis (archive software
-  varies by project). If unreachable or empty, record why.
-
-### 4. Cluster and classify
-
-Cluster semantically similar questions across all channels — a question
-asked once in a mailing list thread and twice on GitHub is one cluster, not
-three. Compare each cluster against the current FAQ and classify it as:
-
-- Already adequately covered
-- Existing entry should be expanded or clarified
-- Candidate for a new FAQ entry
-
-Prefer recurring questions, common confusion, and repeated misconceptions.
-Avoid one-off support requests, speculative answers, and any policy not
-confirmed by official docs or maintainer responses — never infer policy from
-community speculation.
-
-### 5. Draft proposals
-
-For each candidate cluster, draft a complete, paste-ready FAQ entry matching
-the formatting style of the existing FAQ, with source links back to the
-originating GitHub issues or mailing list messages.
-
-### 6. Update cache-memory
-
-Store the newest timestamp actually processed for each individual channel —
-not the current time — so a partially failed run doesn't cause items to be
-skipped on the next run.
-
-### 7. Produce exactly one output
-
-If there are proposals, create a single GitHub issue formatted as follows:
-
-```
-## Summary
-[Overall trends, question volume, recurring themes]
-
-## Channel Coverage
-[Every channel reviewed, every channel skipped, and why]
-
-## Proposed New FAQ Entries
-[For each: why it belongs, motivating discussions with source links, paste-ready entry]
-
-## Existing FAQ Improvements
-[Entries to expand, clarify, merge, update, or remove, with replacement text]
-
-## Frequently Asked (Already Covered)
-[Questions that keep appearing despite existing documentation]
-
-## Documentation Gaps
-[Topics users repeatedly struggle to discover]
+Answer text. Internal links use link:/temurin/releases[label];
+external links use https://example.com[label].
 ```
 
-If there are no proposals, call `noop` with a concise explanation, e.g.:
+## Continuity across runs
 
-> No recurring questions requiring FAQ updates were identified since the previous review.
+Use `cache-memory` with the key `watermark` (an ISO 8601 timestamp). Read it at the
+start; process only items newer than it; write the newest processed timestamp back
+at the end. If the key is missing (first run), use `window-start.txt` as the cutoff.
+This keeps the review incremental.
 
-## Guidelines
+## Slack channel
 
-- Never modify the FAQ directly — only propose changes via the issue.
-- Never create more than one issue per run, and never terminate silently.
-- Never hard-code a repository, channel, or URL in the Instructions section —
-  always read it from Configuration above.
-- Be concise. A source link is often better than a long explanation.
-- If a channel is unreachable, say so plainly rather than guessing at its content.
-- Do not fabricate source links — every claim in the proposed output must
-  trace back to a discussion you actually retrieved.
-- Treat official documentation and maintainer responses as authoritative over
-  community speculation whenever they conflict.
+Read `#support`, `#community`, `#general` via the Slack MCP tools: call
+`slack_list_channels` to resolve IDs, then `slack_get_channel_history` per channel
+(and `slack_get_thread_replies` for threads) for messages since the watermark. If
+Slack tools are unavailable, skip and note it in Channel Coverage; do not abort.
+
+## Process
+
+1. Read the `watermark` from `cache-memory`.
+2. Parse `faq.adoc` and list its existing questions.
+3. Read the pre-fetched JSON files and the Slack history; collect questions newer
+   than the watermark. Note which channels had data and which were empty/skipped.
+4. Cluster semantically similar questions (across channels — the same question in
+   Slack and in a support issue counts once).
+5. Classify each cluster vs. the FAQ: already covered; covered but needs
+   update/expansion; or not covered (new-entry candidate).
+6. Draft proposals (format below).
+7. Write the updated `watermark` to `cache-memory`.
+8. **Terminal action — end with exactly one safe output:**
+   - Anything worth reporting → call `create_issue` with the full report.
+   - Every reachable channel genuinely empty → call `noop` with a one-line reason.
+   - Never finish without a safe-output call.
+## Output: issue format
+
+### Summary
+Trends this period; volume up or down; common themes.
+
+### Channel Coverage
+Which channels were read, and which were skipped and why.
+
+### Proposed New FAQ Entries
+Per proposal, in order: why it belongs (1–2 sentences); motivating discussions
+(links, or Slack channel + approximate time); a paste-ready AsciiDoc block matching
+the existing style:
+
+```asciidoc
+== <Proposed question>?
+
+<Draft answer in AsciiDoc, using link:/path[label] and https://url[label]>
+```
+
+Then: **Apply to:** `content/asciidoc-pages/docs/faq/index.adoc` in `adoptium/adoptium.net`.
+
+### Existing FAQ Improvements
+Entries to expand, clarify, update, merge, or remove — name the `== Heading`, the
+change, and the reasoning. Give proposed wording as a paste-ready AsciiDoc block.
+
+### Frequently Asked (already covered)
+Recurring questions already handled adequately — useful signal, no change needed.
+
+### Documentation Gaps
+Where users consistently struggled to find answers.
+
+## Constraints
+
+- Do **not** modify the FAQ directly; propose only.
+- Every block must be valid AsciiDoc matching the existing style.
+- Prefer official maintainer answers over community speculation.
+- Focus on recurring or broadly useful questions, not one-offs.
+- Never duplicate an existing entry; compare against `faq.adoc` first.
+- Include source links wherever possible.
+- Exactly one issue per run, or a `noop`. Never neither.
