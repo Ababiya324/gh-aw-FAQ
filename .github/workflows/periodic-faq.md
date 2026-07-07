@@ -116,17 +116,33 @@ This keeps the review incremental.
 
 ## Slack channel
 
-Read `#support`, `#community`, `#general` via the Slack MCP tools: call
-`slack_list_channels` to resolve IDs, then `slack_get_channel_history` per channel
-(and `slack_get_thread_replies` for threads) for messages since the watermark. If
-Slack tools are unavailable, skip and note it in Channel Coverage; do not abort.
+Reading Slack is **mandatory** every run — it is a primary source, not an optional
+extra. You MUST call `slack_list_channels` to resolve IDs, then
+`slack_get_channel_history` for `#support`, `#community`, and `#general` (and
+`slack_get_thread_replies` for threads) for messages since the watermark. Do this
+before drafting any proposals; do not skip it because the other sources already
+yielded enough material.
+
+The only acceptable reason to not read a channel is a genuine tool failure — the
+Slack MCP tool returns an error (e.g. `missing_scope`, `not_in_channel`,
+`invalid_auth`, a rate limit / `429`, or the tool is absent). In that case:
+- Attempt the call anyway; do not assume it will fail without trying.
+- In **Channel Coverage**, record the exact tool name and the verbatim error string
+  returned (e.g. "`slack_get_channel_history` → `not_in_channel`"). Never write a
+  vague "tooling not invoked" — if you did not invoke it, that is a failure to
+  follow instructions, not a valid skip.
+- Reading other sources may still continue, but a Slack failure must be surfaced
+  loudly in the report so it can be fixed.
 
 ## Process
 
 1. Read the `watermark` from `cache-memory`.
 2. Parse `faq.adoc` and list its existing questions.
-3. Read the pre-fetched JSON files and the Slack history; collect questions newer
-   than the watermark. Note which channels had data and which were empty/skipped.
+3. Read the pre-fetched JSON files, then read the Slack history (mandatory — call
+   `slack_list_channels` and `slack_get_channel_history` as described above; only a
+   returned tool error excuses a channel). Collect questions newer than the
+   watermark. Note which channels had data, which were empty, and which failed with
+   what error.
 4. Cluster semantically similar questions (across channels — the same question in
    Slack and in a support issue counts once).
 5. Classify each cluster vs. the FAQ: already covered; covered but needs
@@ -143,7 +159,10 @@ Slack tools are unavailable, skip and note it in Channel Coverage; do not abort.
 Trends this period; volume up or down; common themes.
 
 ### Channel Coverage
-Which channels were read, and which were skipped and why.
+Which channels were read, and which failed and why. For Slack specifically, state
+whether `slack_list_channels` / `slack_get_channel_history` were called and, on
+failure, the verbatim error returned. "Not invoked" is not an acceptable Slack
+status — it means the mandatory read was skipped.
 
 ### Proposed New FAQ Entries
 Per proposal, in order: why it belongs (1–2 sentences); motivating discussions
