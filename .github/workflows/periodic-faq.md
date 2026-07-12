@@ -18,6 +18,9 @@ network:
     - node                    # npx fetches the Slack MCP server
     - "slack.com"
     - "*.slack.com"
+    - "api.stackexchange.com"   # web-fetch fallback for the pre-fetched sources
+    - "www.reddit.com"
+    - "accounts.eclipse.org"
 # Deterministic pre-fetch: runs outside the firewall sandbox, before the agent.
 # Pulls the FAQ + GitHub questions with plain curl and writes them to files, so the
 # agent spends inference on judgement (cluster/compare/draft), not on fetching.
@@ -49,9 +52,44 @@ steps:
       curl -sSL "${GH_API[@]}" \
         "https://api.github.com/search/issues?q=org:adoptium+label:PMC-agenda+state:open&per_page=50" \
         -o "$DIR/pmc-agenda.json"
-      # PMC mailing list archive (best effort; never fail the run)
+      # Issues from other user-facing Adoptium repos: install, container, and
+      # website questions that never reach adoptium-support
+      for REPO in installer containers adoptium.net; do
+        curl -sSL "${GH_API[@]}" \
+          "https://api.github.com/repos/adoptium/$REPO/issues?state=all&since=$SINCE&per_page=100" \
+          -o "$DIR/issues-$REPO.json"
+      done
+      # GitHub Discussions across the adoptium org (GraphQL search; best effort)
+      SINCE_DAY=$(date -u -d '7 days ago' +%Y-%m-%d)
+      gh api graphql -f query="
+        query {
+          search(query: \"org:adoptium updated:>=$SINCE_DAY\", type: DISCUSSION, first: 50) {
+            nodes { ... on Discussion {
+              title body url updatedAt repository { nameWithOwner }
+              comments(first: 10) { nodes { body } }
+            } }
+          }
+        }" > "$DIR/discussions.json" \
+        || echo '{"data":{"search":{"nodes":[]}}}' > "$DIR/discussions.json"
+      # Stack Overflow questions per tag (public API; responses are always gzip,
+      # hence --compressed; best effort — never fail the run)
+      SINCE_EPOCH=$(date -u -d '7 days ago' +%s)
+      for TAG in adoptium temurin adoptopenjdk; do
+        curl -sSL --compressed \
+          "https://api.stackexchange.com/2.3/questions?order=desc&sort=creation&tagged=$TAG&site=stackoverflow&fromdate=$SINCE_EPOCH&filter=withbody" \
+          -o "$DIR/so-$TAG.json" || echo '{"items":[]}' > "$DIR/so-$TAG.json"
+      done
+      # Reddit mentions (public JSON; Reddit sometimes blocks CI IPs — best effort)
+      curl -sSL -A "adoptium-faq-review:v1.0 (github-actions)" \
+        "https://www.reddit.com/search.json?q=temurin%20OR%20adoptium&sort=new&t=week&limit=50&raw_json=1" \
+        -o "$DIR/reddit.json" || echo '{"data":{"children":[]}}' > "$DIR/reddit.json"
+      # Mailing list archives: PMC plus the dev lists (best effort; never fail the run)
       curl -sSL "https://accounts.eclipse.org/mailing-list/adoptium-pmc" \
         -o "$DIR/mailing-list.html" || echo "mailing list unavailable" > "$DIR/mailing-list.html"
+      for ML in adoptium-dev temurin-dev; do
+        curl -sSL "https://accounts.eclipse.org/mailing-list/$ML" \
+          -o "$DIR/mailing-$ML.html" || echo "mailing list unavailable" > "$DIR/mailing-$ML.html"
+      done
       echo "Pre-fetch complete:"; ls -la "$DIR"
 tools:
   web-fetch:                  # fallback fetch if a pre-fetched file is missing
@@ -90,11 +128,28 @@ these files directly instead of making web requests:
 - `support-open.json`, `support-closed.json` — `adoptium/adoptium-support` issues
   (a JSON array). Review each item's `title`, `body`, and comments.
 - `pmc-agenda.json` — org-wide `PMC-agenda` issues. Read the `items` array.
+- `issues-installer.json`, `issues-containers.json`, `issues-adoptium.net.json` —
+  issues (open and closed, JSON arrays) from the other user-facing Adoptium repos:
+  install, container, and website questions.
+- `discussions.json` — GitHub Discussions across the `adoptium` org. Read
+  `data.search.nodes[]`: `title`, `body`, `url`, `repository.nameWithOwner`, and
+  `comments.nodes[].body`.
+- `so-adoptium.json`, `so-temurin.json`, `so-adoptopenjdk.json` — Stack Overflow
+  questions per tag (Stack Exchange API format). Read `items[]`: `title`, `body`,
+  `link`, `creation_date`. The same question may appear under more than one tag —
+  dedupe by `question_id`.
+- `reddit.json` — Reddit search results for Temurin/Adoptium mentions. Read
+  `data.children[].data`: `title`, `selftext`, `permalink`, `subreddit`.
 - `mailing-list.html` — PMC mailing list archive, or the text "mailing list
   unavailable" if the fetch failed (then skip it and note so).
+- `mailing-adoptium-dev.html`, `mailing-temurin-dev.html` — dev mailing list
+  archives, same fallback text on failure.
 - `window-start.txt` — the ISO 8601 start of the 7-day pre-fetch window.
 
-Only fall back to `web-fetch` if one of these files is missing or empty.
+Only fall back to `web-fetch` if one of these files is missing or empty. If a file
+exists but is not parseable in its documented format (e.g. an HTML block page or an
+API error body instead of JSON), treat that channel as **failed**, quote a short
+snippet of what was found, and move on — never invent data for it.
 
 ## FAQ format
 
@@ -117,18 +172,23 @@ This keeps the review incremental.
 ## Slack channel
 
 Reading Slack is **mandatory** every run — it is a primary source, not an optional
-extra. You MUST call `slack_list_channels` to resolve IDs, then
-`slack_get_channel_history` for `#support`, `#community`, and `#general` (and
-`slack_get_thread_replies` for threads) for messages since the watermark. Do this
-before drafting any proposals; do not skip it because the other sources already
-yielded enough material.
+extra. You MUST call `slack_list_channels`, then `slack_get_channel_history` for
+**every channel where the bot is a member** (`is_member: true` in the
+`slack_list_channels` response — do not hardcode a channel list; membership is the
+source of truth), and `slack_get_thread_replies` for threads, for messages since
+the watermark. If `is_member` is absent from the response, attempt the history
+call on every listed channel and treat `not_in_channel` as "not a member" rather
+than a failure. Do this before drafting any proposals; do not skip it because the
+other sources already yielded enough material.
 
-The only acceptable reason to not read a channel is a genuine tool failure — the
-Slack MCP tool returns an error (e.g. `missing_scope`, `not_in_channel`,
-`invalid_auth`, a rate limit / `429`, or the tool is absent). In that case:
+The only acceptable reason to not read a member channel is a genuine tool
+failure — the Slack MCP tool returns an error (e.g. `missing_scope`,
+`invalid_auth`, a rate limit / `429`, or the tool is absent). Channels the bot is
+not a member of are simply listed as "not a member" in Channel Coverage — that is
+a skip, not a failure. For genuine failures:
 - Attempt the call anyway; do not assume it will fail without trying.
 - In **Channel Coverage**, record the exact tool name and the verbatim error string
-  returned (e.g. "`slack_get_channel_history` → `not_in_channel`"). Never write a
+  returned (e.g. "`slack_get_channel_history` → `missing_scope`"). Never write a
   vague "tooling not invoked" — if you did not invoke it, that is a failure to
   follow instructions, not a valid skip.
 - Reading other sources may still continue, but a Slack failure must be surfaced
@@ -138,13 +198,14 @@ Slack MCP tool returns an error (e.g. `missing_scope`, `not_in_channel`,
 
 1. Read the `watermark` from `cache-memory`.
 2. Parse `faq.adoc` and list its existing questions.
-3. Read the pre-fetched JSON files, then read the Slack history (mandatory — call
-   `slack_list_channels` and `slack_get_channel_history` as described above; only a
-   returned tool error excuses a channel). Collect questions newer than the
-   watermark. Note which channels had data, which were empty, and which failed with
-   what error.
+3. Read **all** the pre-fetched files (support issues, other-repo issues,
+   discussions, Stack Overflow, Reddit, mailing lists), then read the Slack history
+   (mandatory — call `slack_list_channels` and `slack_get_channel_history` as
+   described above; only a returned tool error excuses a channel). Collect
+   questions newer than the watermark. Note which channels had data, which were
+   empty, and which failed with what error.
 4. Cluster semantically similar questions (across channels — the same question in
-   Slack and in a support issue counts once).
+   Slack, on Stack Overflow, and in a support issue counts once).
 5. Classify each cluster vs. the FAQ: already covered; covered but needs
    update/expansion; or not covered (new-entry candidate).
 6. Draft proposals (format below).
@@ -159,10 +220,12 @@ Slack MCP tool returns an error (e.g. `missing_scope`, `not_in_channel`,
 Trends this period; volume up or down; common themes.
 
 ### Channel Coverage
-Which channels were read, and which failed and why. For Slack specifically, state
-whether `slack_list_channels` / `slack_get_channel_history` were called and, on
-failure, the verbatim error returned. "Not invoked" is not an acceptable Slack
-status — it means the mandatory read was skipped.
+One line per channel — every pre-fetched source (adoptium-support, installer,
+containers, adoptium.net, org Discussions, Stack Overflow, Reddit, each mailing
+list) plus Slack — stating read / empty / failed, and on failure why. For Slack
+specifically, state whether `slack_list_channels` / `slack_get_channel_history`
+were called and, on failure, the verbatim error returned. "Not invoked" is not an
+acceptable Slack status — it means the mandatory read was skipped.
 
 ### Proposed New FAQ Entries
 Per proposal, in order: why it belongs (1–2 sentences); motivating discussions
