@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 engine:
   id: copilot
-  model: gpt-4o               # claude models are not enabled for this Copilot account
+  model: gpt-4.1              # free-tier eligible + reliable tool-caller; gpt-4o skips safe-output calls, claude models are not enabled for this account
 permissions:
   contents: read
   issues: read
