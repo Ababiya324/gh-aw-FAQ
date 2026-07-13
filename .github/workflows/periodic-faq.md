@@ -20,7 +20,7 @@ network:
     - "*.slack.com"
     - "api.stackexchange.com"   # web-fetch fallback for the pre-fetched sources
     - "www.reddit.com"
-    - "accounts.eclipse.org"
+    - "www.eclipse.org"
 # Deterministic pre-fetch: runs outside the firewall sandbox, before the agent.
 # Pulls the FAQ + GitHub questions with plain curl and writes them to files, so the
 # agent spends inference on judgement (cluster/compare/draft), not on fetching.
@@ -83,11 +83,14 @@ steps:
       curl -sSL -A "adoptium-faq-review:v1.0 (github-actions)" \
         "https://www.reddit.com/search.json?q=temurin%20OR%20adoptium&sort=new&t=week&limit=50&raw_json=1" \
         -o "$DIR/reddit.json" || echo '{"data":{"children":[]}}' > "$DIR/reddit.json"
-      # Mailing list archives: PMC plus the dev lists (best effort; never fail the run)
-      curl -sSL "https://accounts.eclipse.org/mailing-list/adoptium-pmc" \
+      # Mailing list archives (actual MHonArc archive pages, not the
+      # accounts.eclipse.org subscription page). PMC plus the dev lists;
+      # best effort, never fail the run. Note: there is no "adoptium-dev"
+      # list (confirmed 404) — PMC discussion lives on adoptium-pmc instead.
+      curl -sSL "https://www.eclipse.org/lists/adoptium-pmc/" \
         -o "$DIR/mailing-list.html" || echo "mailing list unavailable" > "$DIR/mailing-list.html"
-      for ML in adoptium-dev temurin-dev; do
-        curl -sSL "https://accounts.eclipse.org/mailing-list/$ML" \
+      for ML in temurin-dev; do
+        curl -sSL "https://www.eclipse.org/lists/$ML/" \
           -o "$DIR/mailing-$ML.html" || echo "mailing list unavailable" > "$DIR/mailing-$ML.html"
       done
       echo "Pre-fetch complete:"; ls -la "$DIR"
@@ -142,8 +145,9 @@ these files directly instead of making web requests:
   `data.children[].data`: `title`, `selftext`, `permalink`, `subreddit`.
 - `mailing-list.html` — PMC mailing list archive, or the text "mailing list
   unavailable" if the fetch failed (then skip it and note so).
-- `mailing-adoptium-dev.html`, `mailing-temurin-dev.html` — dev mailing list
-  archives, same fallback text on failure.
+- `mailing-temurin-dev.html` — temurin-dev mailing list archive, same
+  fallback text on failure. (There is no adoptium-dev list — PMC traffic is
+  on adoptium-pmc, which is covered by `mailing-list.html`.)
 - `window-start.txt` — the ISO 8601 start of the 7-day pre-fetch window.
 
 Only fall back to `web-fetch` if one of these files is missing or empty. If a file
