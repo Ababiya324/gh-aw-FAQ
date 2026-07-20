@@ -94,6 +94,31 @@ steps:
         curl -sSL "https://www.eclipse.org/lists/$ML/" \
           -o "$DIR/mailing-$ML.html" || echo "mailing list unavailable" > "$DIR/mailing-$ML.html"
       done
+      # Slim the pre-fetched payloads deterministically: keep only the fields the
+      # agent uses and cap long bodies. This runs for free (no inference) and
+      # sharply cuts the tokens the agent must read. Field names are preserved, so
+      # the documented file formats below still hold. jq failures leave the
+      # original file untouched (best effort — never fail the run).
+      CAP=2500
+      slim() { jq "$2" "$1" > "$1.slim" 2>/dev/null && mv "$1.slim" "$1" || rm -f "$1.slim"; }
+      ISSUE_FILTER="[.[]? | {number, title, state, created_at, updated_at, html_url, labels: [.labels[]?.name], body: ((.body // \"\")[0:$CAP])}]"
+      for f in support-open support-closed issues-installer issues-containers issues-adoptium.net; do
+        slim "$DIR/$f.json" "$ISSUE_FILTER"
+      done
+      slim "$DIR/pmc-agenda.json" "{items: [.items[]? | {number, title, state, created_at, html_url, repository_url, body: ((.body // \"\")[0:$CAP])}]}"
+      for TAG in adoptium temurin adoptopenjdk; do
+        slim "$DIR/so-$TAG.json" "{items: [.items[]? | {question_id, title, link, creation_date, tags, body: ((.body // \"\")[0:$CAP])}]}"
+      done
+      slim "$DIR/discussions.json" "{data: {search: {nodes: [.data.search.nodes[]? | {title, url, updatedAt, repository, body: ((.body // \"\")[0:$CAP]), comments: {nodes: [.comments.nodes[]? | {body: ((.body // \"\")[0:1000])}]}}]}}}"
+      slim "$DIR/reddit.json" "{data: {children: [.data.children[]? | {data: {title: .data.title, subreddit: .data.subreddit, permalink: .data.permalink, created_utc: .data.created_utc, selftext: ((.data.selftext // \"\")[0:2000])}}]}}"
+      # Mailing list archives: strip HTML to plain text and cap — the raw pages
+      # are mostly markup with little content. Keep the same filenames.
+      for M in mailing-list mailing-temurin-dev; do
+        if [ -f "$DIR/$M.html" ]; then
+          sed -e 's/<[^>]*>/ /g' "$DIR/$M.html" | tr -s ' \t\n' ' ' | cut -c1-6000 > "$DIR/$M.txt" 2>/dev/null \
+            && mv "$DIR/$M.txt" "$DIR/$M.html" || rm -f "$DIR/$M.txt"
+        fi
+      done
       echo "Pre-fetch complete:"; ls -la "$DIR"
 tools:
   web-fetch:                  # fallback fetch if a pre-fetched file is missing
@@ -156,6 +181,10 @@ exists but is not parseable in its documented format (e.g. an HTML block page or
 API error body instead of JSON), treat that channel as **failed**, quote a short
 snippet of what was found, and move on — never invent data for it.
 
+Note: item bodies in these files are truncated (~2500 chars) to conserve context.
+That is enough to cluster and classify; if you need the full text of a specific
+item to draft a proposal, follow its link rather than re-fetching the whole source.
+
 ## FAQ format
 
 AsciiDoc. Each entry is a second-level heading plus prose:
@@ -185,6 +214,11 @@ the watermark. If `is_member` is absent from the response, attempt the history
 call on every listed channel and treat `not_in_channel` as "not a member" rather
 than a failure. Do this before drafting any proposals; do not skip it because the
 other sources already yielded enough material.
+
+To conserve tokens, request a modest page size (`limit: 50`) — only messages newer
+than the watermark matter, so there is no need to pull the maximum history. Save
+large tool outputs to a file and filter with `jq`/`grep` rather than reading them
+whole into context.
 
 The only acceptable reason to not read a member channel is a genuine tool
 failure — the Slack MCP tool returns an error (e.g. `missing_scope`,
