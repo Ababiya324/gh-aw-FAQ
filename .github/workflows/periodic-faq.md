@@ -11,6 +11,7 @@ permissions:
   issues: read
   pull-requests: read
   discussions: read
+  copilot-requests: write     # use Actions token-based Copilot inference (no PAT secret)
 network:
   allowed:
     - defaults
