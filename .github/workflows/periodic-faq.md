@@ -12,7 +12,7 @@ on:
         required: false
 engine:
   id: copilot
-  model: gpt-4.1              # free-tier eligible + reliable tool-caller; gpt-4o skips safe-output calls, claude models are not enabled for this account
+  model: gpt-4.1              # pinned: reliably calls the safe-output tools
 permissions:
   contents: read
   issues: read
