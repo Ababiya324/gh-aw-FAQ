@@ -33,18 +33,11 @@ network:
 # Pulls the FAQ + GitHub questions with plain curl and writes them to files, so the
 # agent spends inference on judgement (cluster/compare/draft), not on fetching.
 steps:
-  # Check out the FAQ repo (public, so no token needed here) so the agent can
-  # edit it in PR mode. The draft PR is pushed by the safe-outputs handler using
-  # ADOPTIUM_FAQ_TOKEN in a separate job. In issue mode the agent ignores this
-  # checkout. current: true makes PR patch generation run from this path.
-  - name: Check out the FAQ repo
-    uses: actions/checkout@v6
-    continue-on-error: true
-    with:
-      repository: adoptium/adoptium.net
-      path: repos/faq-repo
-      current: true
-      persist-credentials: false
+  # NOTE (PR mode): the FAQ repo (adoptium/adoptium.net) checkout for cross-repo
+  # draft PRs must be wired via gh-aw's cross-repository checkout mechanism, not a
+  # raw actions/checkout here (that broke the agent job's git credentials). This
+  # is finalized when PR mode is validated with ADOPTIUM_FAQ_TOKEN. Until then the
+  # workflow runs in issue mode and needs no extra checkout.
   - name: Pre-fetch FAQ and GitHub sources
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
