@@ -33,11 +33,24 @@ network:
 # Pulls the FAQ + GitHub questions with plain curl and writes them to files, so the
 # agent spends inference on judgement (cluster/compare/draft), not on fetching.
 steps:
+  # Check out the FAQ repo (public, so no token needed here) so the agent can
+  # edit it in PR mode. The draft PR is pushed by the safe-outputs handler using
+  # ADOPTIUM_FAQ_TOKEN in a separate job. In issue mode the agent ignores this
+  # checkout. current: true makes PR patch generation run from this path.
+  - name: Check out the FAQ repo
+    uses: actions/checkout@v6
+    continue-on-error: true
+    with:
+      repository: adoptium/adoptium.net
+      path: repos/faq-repo
+      current: true
+      persist-credentials: false
   - name: Pre-fetch FAQ and GitHub sources
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       FAQ_SINCE: ${{ github.event.inputs.since }}
       FAQ_UNTIL: ${{ github.event.inputs.until }}
+      HAS_FAQ_TOKEN: ${{ secrets.ADOPTIUM_FAQ_TOKEN != '' }}
     run: |
       set -euo pipefail
       DIR=/tmp/gh-aw/agent
@@ -67,6 +80,21 @@ steps:
       [ "${#ISSUE_REPOS[@]}" -gt 0 ] || ISSUE_REPOS=(installer containers adoptium.net)
       [ "${#SO_TAGS[@]}" -gt 0 ] || SO_TAGS=(adoptium temurin adoptopenjdk)
       [ "${#MAILING_LISTS[@]}" -gt 0 ] || MAILING_LISTS=(adoptium-pmc temurin-dev)
+      FAQ_REPO=$(cfg '.faq_repo'); : "${FAQ_REPO:=adoptium/adoptium.net}"
+      FAQ_PATH=$(cfg '.faq_path'); : "${FAQ_PATH:=content/asciidoc-pages/docs/faq/index.adoc}"
+
+      # --- Output mode. If ADOPTIUM_FAQ_TOKEN is configured, the FAQ repo was
+      # checked out (previous step) and the agent opens a draft PR editing the
+      # FAQ; otherwise it falls back to filing an issue in this repo. Only the
+      # boolean presence of the token is used here, never its value. ---
+      if [ "${HAS_FAQ_TOKEN:-false}" = "true" ]; then
+        echo "pr" > "$DIR/output-mode.txt"
+        echo "repos/faq-repo/$FAQ_PATH" > "$DIR/faq-edit-path.txt"
+        echo "$FAQ_REPO" > "$DIR/faq-target-repo.txt"
+      else
+        echo "issue" > "$DIR/output-mode.txt"
+      fi
+      echo "Output mode: $(cat "$DIR/output-mode.txt")"
 
       # --- Review window. Explicit since/until (workflow_dispatch inputs) mean a
       # one-off backfill; otherwise default to the past 7 days. ---
@@ -182,17 +210,31 @@ mcp-servers:
       - slack_get_channel_history
       - slack_get_thread_replies
 safe-outputs:
+  # Fallback (issue mode): filed in this repo with the default token.
   create-issue:
     title-prefix: "[faq-review] "
     labels: [documentation, faq]
     expires: false
+  # PR mode: a draft PR editing the FAQ in adoptium.net. Only reachable when the
+  # agent chooses it (output-mode.txt = pr), which only happens when
+  # ADOPTIUM_FAQ_TOKEN is configured and the FAQ repo was checked out. Draft is
+  # enforced by policy. target-repo must match .faq_repo in faq-sources.json.
+  create-pull-request:
+    title-prefix: "[faq-review] "
+    labels: [documentation, faq]
+    base-branch: main
+    target-repo: "adoptium/adoptium.net"
+    allowed-repos: ["adoptium/adoptium.net"]
+    github-token: ${{ secrets.ADOPTIUM_FAQ_TOKEN }}
 ---
 
 # Adoptium FAQ Review
 
 You review community questions across several channels and propose improvements to
-the **Adoptium FAQ**. You do **not** edit the FAQ directly; you produce a single
-GitHub issue with ready-to-apply proposals for maintainer review.
+the **Adoptium FAQ**. How you deliver those proposals depends on the output mode
+(see **Output mode** below): either a draft pull request that edits the FAQ, or a
+GitHub issue with ready-to-apply proposals. Either way the work is **proposed for
+maintainer review** — a draft PR is never merged automatically.
 
 ## Pre-fetched inputs (read these, do not re-fetch)
 
@@ -224,6 +266,10 @@ rather than a fixed list. Read these files directly instead of making web reques
   window (bound both ends of what you consider).
 - `window-mode.txt` — `incremental` (normal scheduled run) or `backfill` (an
   explicit date range was requested). See **Continuity across runs**.
+- `output-mode.txt` — `pr` or `issue`. See **Output mode**.
+- `faq-edit-path.txt` — (pr mode only) the path to the FAQ file to edit in the
+  checked-out repo, e.g. `repos/faq-repo/content/asciidoc-pages/docs/faq/index.adoc`.
+- `faq-target-repo.txt` — (pr mode only) the repo the draft PR targets.
 
 Only fall back to `web-fetch` if one of these files is missing or empty. If a file
 exists but is not parseable in its documented format (e.g. an HTML block page or an
@@ -289,9 +335,28 @@ a skip, not a failure. For genuine failures:
 - Reading other sources may still continue, but a Slack failure must be surfaced
   loudly in the report so it can be fixed.
 
+## Output mode
+
+Read `output-mode.txt` first; it decides how you deliver proposals.
+
+**`pr`** (the FAQ repo was checked out because `ADOPTIUM_FAQ_TOKEN` is configured):
+edit the FAQ file at the path in `faq-edit-path.txt` directly — apply your new
+entries and existing-entry changes in place, in valid AsciiDoc matching the current
+style — then finish with `create_pull_request` (a draft PR against the repo in
+`faq-target-repo.txt`). The PR **description** carries the same narrative the issue
+would (summary, channel coverage, why each change belongs with sources, one-offs,
+documentation gaps). Do not edit any file outside `faq-edit-path.txt`.
+
+**`issue`** (no token configured — the default): do **not** edit any files. Produce
+the single issue described under **Output: issue format**.
+
+If a run in `pr` mode yields only soft/discussion items with nothing concrete to
+write into the FAQ, fall back to `create_issue` instead of opening an empty PR.
+
 ## Process
 
-1. Read `window-mode.txt`, `window-start.txt`, and `window-end.txt`. In
+1. Read `output-mode.txt`, then `window-mode.txt`, `window-start.txt`, and
+   `window-end.txt`. In
    `incremental` mode also read the `watermark` from `cache-memory`; in `backfill`
    mode ignore the watermark entirely.
 2. Parse `faq.adoc` and list its existing questions.
@@ -309,10 +374,17 @@ a skip, not a failure. For genuine failures:
 6. Draft proposals (format below).
 7. In `incremental` mode, write the updated `watermark` to `cache-memory`. In
    `backfill` mode, do not touch the watermark.
-8. **Terminal action — end with exactly one safe output:**
-   - Anything worth reporting → call `create_issue` with the full report.
+8. **Terminal action — end with exactly one safe output, chosen by `output-mode.txt`:**
+   - `output-mode.txt` = `pr` **and** there is at least one concrete new-entry or
+     existing-entry change → edit the FAQ file named in `faq-edit-path.txt` (apply
+     the AsciiDoc changes in place, matching the existing style) and call
+     `create_pull_request`. Put the reasoning, motivating sources, one-offs, and
+     documentation gaps in the PR description (same content the issue body would
+     carry). The PR is created as a draft for maintainer review.
+   - `output-mode.txt` = `issue` (or `pr` with nothing concrete to write) → call
+     `create_issue` with the full report.
    - Every reachable channel genuinely empty → call `noop` with a one-line reason.
-   - Never finish without a safe-output call.
+   - Never finish without a safe-output call, and never call more than one.
 ## Output: issue format
 
 ### Summary
@@ -351,10 +423,12 @@ Where users consistently struggled to find answers.
 
 ## Constraints
 
-- Do **not** modify the FAQ directly; propose only.
+- Everything is a **proposal for review**: in `issue` mode do not modify any files;
+  in `pr` mode edit only the FAQ file in `faq-edit-path.txt`, and the PR is a draft.
 - Every block must be valid AsciiDoc matching the existing style.
 - Prefer official maintainer answers over community speculation.
 - Focus on recurring or broadly useful questions, not one-offs.
 - Never duplicate an existing entry; compare against `faq.adoc` first.
 - Include source links wherever possible.
-- Exactly one issue per run, or a `noop`. Never neither.
+- Exactly one safe output per run — one draft PR **or** one issue, or a `noop`.
+  Never neither, never more than one.

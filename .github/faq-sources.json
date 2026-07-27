@@ -8,5 +8,7 @@
   "stackoverflow_tags": ["adoptium", "temurin", "adoptopenjdk"],
   "reddit_query": "temurin OR adoptium",
   "mailing_lists": ["adoptium-pmc", "temurin-dev"],
-  "faq_url": "https://raw.githubusercontent.com/adoptium/adoptium.net/main/content/asciidoc-pages/docs/faq/index.adoc"
+  "faq_url": "https://raw.githubusercontent.com/adoptium/adoptium.net/main/content/asciidoc-pages/docs/faq/index.adoc",
+  "faq_repo": "adoptium/adoptium.net",
+  "faq_path": "content/asciidoc-pages/docs/faq/index.adoc"
 }

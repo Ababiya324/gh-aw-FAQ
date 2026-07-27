@@ -1,5 +1,5 @@
-# gh-aw-metadata: {"schema_version":"v4","frontmatter_hash":"0a016098f1221ee78ff5620a707d2c5d1149e99a2f841e49fe98907434801ced","body_hash":"87f726087dd3ce45f9999992762660b1e02a7e39ef12b5ab487bda5700afdd30","compiler_version":"v0.81.6","strict":true,"agent_id":"copilot","agent_model":"gpt-4.1","engine_versions":{"copilot":"1.0.65"}}
-# gh-aw-manifest: {"version":1,"secrets":["GH_AW_GITHUB_MCP_SERVER_TOKEN","GH_AW_GITHUB_TOKEN","GITHUB_TOKEN","SLACK_BOT_TOKEN","SLACK_TEAM_ID"],"actions":[{"repo":"actions/cache/restore","sha":"27d5ce7f107fe9357f9df03efb73ab90386fccae","version":"v5.0.5"},{"repo":"actions/cache/save","sha":"27d5ce7f107fe9357f9df03efb73ab90386fccae","version":"v5.0.5"},{"repo":"actions/checkout","sha":"9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0","version":"v7.0.0"},{"repo":"actions/download-artifact","sha":"3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c","version":"v8.0.1"},{"repo":"actions/github-script","sha":"3a2844b7e9c422d3c10d287c895573f7108da1b3","version":"v9.0.0"},{"repo":"actions/setup-node","sha":"48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e","version":"v6.4.0"},{"repo":"actions/upload-artifact","sha":"043fb46d1a93c77aae656e7c1c64a875d1fc6a0a","version":"v7.0.1"},{"repo":"github/gh-aw-actions/setup","sha":"ba6380cc6e5be5d21677bebe04d52fb48e3abec7","version":"v0.81.6"}],"containers":[{"image":"ghcr.io/github/gh-aw-firewall/agent:0.27.11","digest":"sha256:979723c628182da7729333f2208bb249fd25ddee579645cf9a3892d681a929c7","pinned_image":"ghcr.io/github/gh-aw-firewall/agent:0.27.11@sha256:979723c628182da7729333f2208bb249fd25ddee579645cf9a3892d681a929c7"},{"image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.27.11","digest":"sha256:807e4831999b44513b0a66e5859d478dc4da7ae74ab1918cec967d513f95bf9d","pinned_image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.27.11@sha256:807e4831999b44513b0a66e5859d478dc4da7ae74ab1918cec967d513f95bf9d"},{"image":"ghcr.io/github/gh-aw-firewall/squid:0.27.11","digest":"sha256:ff27ea0525ad953a6adee28a5fbe9d2e22be47dbec755c15767af4ea3f91df7d","pinned_image":"ghcr.io/github/gh-aw-firewall/squid:0.27.11@sha256:ff27ea0525ad953a6adee28a5fbe9d2e22be47dbec755c15767af4ea3f91df7d"},{"image":"ghcr.io/github/gh-aw-mcpg:v0.3.30","digest":"sha256:35625d1a2269b1238606078c879f59a91cffc4ac33eb54bf39c6418822c1a8be","pinned_image":"ghcr.io/github/gh-aw-mcpg:v0.3.30@sha256:35625d1a2269b1238606078c879f59a91cffc4ac33eb54bf39c6418822c1a8be"},{"image":"ghcr.io/github/gh-aw-node","digest":"sha256:529d02eb970b1161aa25c593a9c3df57fdfad5a8add328cb3b6eccef66f3183b","pinned_image":"ghcr.io/github/gh-aw-node@sha256:529d02eb970b1161aa25c593a9c3df57fdfad5a8add328cb3b6eccef66f3183b"},{"image":"ghcr.io/github/github-mcp-server:v1.4.0","digest":"sha256:2afb26356481d1a350e14544a6e160f7f7ec1561a1ea309b823665abf0309036","pinned_image":"ghcr.io/github/github-mcp-server:v1.4.0@sha256:2afb26356481d1a350e14544a6e160f7f7ec1561a1ea309b823665abf0309036"},{"image":"node:lts-alpine","digest":"sha256:2bdb65ed1dab192432bc31c95f94155ca5ad7fc1392fb7eb7526ab682fa5bf14","pinned_image":"node:lts-alpine@sha256:2bdb65ed1dab192432bc31c95f94155ca5ad7fc1392fb7eb7526ab682fa5bf14"}]}
+# gh-aw-metadata: {"schema_version":"v4","frontmatter_hash":"4a275de6cf0d7d77f107a171d8781b9b59aa5a21f8fb405d12881e6759235288","body_hash":"fad9e06e56dffeb5461441e66a7a135d7f48d5ef5e5a9b264cefef902022e9cb","compiler_version":"v0.81.6","strict":true,"agent_id":"copilot","agent_model":"gpt-4.1","engine_versions":{"copilot":"1.0.65"}}
+# gh-aw-manifest: {"version":1,"secrets":["ADOPTIUM_FAQ_TOKEN","GH_AW_CI_TRIGGER_TOKEN","GH_AW_GITHUB_MCP_SERVER_TOKEN","GH_AW_GITHUB_TOKEN","GITHUB_TOKEN","SLACK_BOT_TOKEN","SLACK_TEAM_ID"],"actions":[{"repo":"actions/cache/restore","sha":"27d5ce7f107fe9357f9df03efb73ab90386fccae","version":"v5.0.5"},{"repo":"actions/cache/save","sha":"27d5ce7f107fe9357f9df03efb73ab90386fccae","version":"v5.0.5"},{"repo":"actions/checkout","sha":"9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0","version":"v7.0.0"},{"repo":"actions/checkout","sha":"df4cb1c069e1874edd31b4311f1884172cec0e10","version":"v6.0.3 (source v6)"},{"repo":"actions/download-artifact","sha":"3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c","version":"v8.0.1"},{"repo":"actions/github-script","sha":"3a2844b7e9c422d3c10d287c895573f7108da1b3","version":"v9.0.0"},{"repo":"actions/setup-node","sha":"48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e","version":"v6.4.0"},{"repo":"actions/upload-artifact","sha":"043fb46d1a93c77aae656e7c1c64a875d1fc6a0a","version":"v7.0.1"},{"repo":"github/gh-aw-actions/setup","sha":"ba6380cc6e5be5d21677bebe04d52fb48e3abec7","version":"v0.81.6"}],"containers":[{"image":"ghcr.io/github/gh-aw-firewall/agent:0.27.11","digest":"sha256:979723c628182da7729333f2208bb249fd25ddee579645cf9a3892d681a929c7","pinned_image":"ghcr.io/github/gh-aw-firewall/agent:0.27.11@sha256:979723c628182da7729333f2208bb249fd25ddee579645cf9a3892d681a929c7"},{"image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.27.11","digest":"sha256:807e4831999b44513b0a66e5859d478dc4da7ae74ab1918cec967d513f95bf9d","pinned_image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.27.11@sha256:807e4831999b44513b0a66e5859d478dc4da7ae74ab1918cec967d513f95bf9d"},{"image":"ghcr.io/github/gh-aw-firewall/squid:0.27.11","digest":"sha256:ff27ea0525ad953a6adee28a5fbe9d2e22be47dbec755c15767af4ea3f91df7d","pinned_image":"ghcr.io/github/gh-aw-firewall/squid:0.27.11@sha256:ff27ea0525ad953a6adee28a5fbe9d2e22be47dbec755c15767af4ea3f91df7d"},{"image":"ghcr.io/github/gh-aw-mcpg:v0.3.30","digest":"sha256:35625d1a2269b1238606078c879f59a91cffc4ac33eb54bf39c6418822c1a8be","pinned_image":"ghcr.io/github/gh-aw-mcpg:v0.3.30@sha256:35625d1a2269b1238606078c879f59a91cffc4ac33eb54bf39c6418822c1a8be"},{"image":"ghcr.io/github/gh-aw-node","digest":"sha256:529d02eb970b1161aa25c593a9c3df57fdfad5a8add328cb3b6eccef66f3183b","pinned_image":"ghcr.io/github/gh-aw-node@sha256:529d02eb970b1161aa25c593a9c3df57fdfad5a8add328cb3b6eccef66f3183b"},{"image":"ghcr.io/github/github-mcp-server:v1.4.0","digest":"sha256:2afb26356481d1a350e14544a6e160f7f7ec1561a1ea309b823665abf0309036","pinned_image":"ghcr.io/github/github-mcp-server:v1.4.0@sha256:2afb26356481d1a350e14544a6e160f7f7ec1561a1ea309b823665abf0309036"},{"image":"node:lts-alpine","digest":"sha256:2bdb65ed1dab192432bc31c95f94155ca5ad7fc1392fb7eb7526ab682fa5bf14","pinned_image":"node:lts-alpine@sha256:2bdb65ed1dab192432bc31c95f94155ca5ad7fc1392fb7eb7526ab682fa5bf14"}]}
 # This file was automatically generated by gh-aw (v0.81.6). DO NOT EDIT. To debug this workflow, load the skill at https://github.com/github/gh-aw/blob/main/debug.md
 #
 #    ___                   _   _      
@@ -26,6 +26,8 @@
 # Continuous multi-channel review of community questions with proposed Adoptium FAQ updates.
 #
 # Secrets used:
+#   - ADOPTIUM_FAQ_TOKEN
+#   - GH_AW_CI_TRIGGER_TOKEN
 #   - GH_AW_GITHUB_MCP_SERVER_TOKEN
 #   - GH_AW_GITHUB_TOKEN
 #   - GITHUB_TOKEN
@@ -36,6 +38,7 @@
 #   - actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
 #   - actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
 #   - actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+#   - actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3 (source v6)
 #   - actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
 #   - actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
 #   - actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0 (source v9)
@@ -247,21 +250,24 @@ jobs:
         run: |
           bash "${RUNNER_TEMP}/gh-aw/actions/create_prompt_first.sh"
           {
-          cat << 'GH_AW_PROMPT_81ccbf0b47e17931_EOF'
+          cat << 'GH_AW_PROMPT_fe5290c75c5a738f_EOF'
           <system>
-          GH_AW_PROMPT_81ccbf0b47e17931_EOF
+          GH_AW_PROMPT_fe5290c75c5a738f_EOF
           cat "${RUNNER_TEMP}/gh-aw/prompts/xpia.md"
           cat "${RUNNER_TEMP}/gh-aw/prompts/temp_folder_prompt.md"
           cat "${RUNNER_TEMP}/gh-aw/prompts/markdown.md"
           cat "${RUNNER_TEMP}/gh-aw/prompts/cache_memory_prompt.md"
           cat "${RUNNER_TEMP}/gh-aw/prompts/safe_outputs_prompt.md"
-          cat << 'GH_AW_PROMPT_81ccbf0b47e17931_EOF'
+          cat << 'GH_AW_PROMPT_fe5290c75c5a738f_EOF'
           <safe-output-tools>
-          Tools: create_issue, missing_tool, missing_data, noop
+          Tools: create_issue, create_pull_request, missing_tool, missing_data, noop
+          GH_AW_PROMPT_fe5290c75c5a738f_EOF
+          cat "${RUNNER_TEMP}/gh-aw/prompts/safe_outputs_create_pull_request.md"
+          cat << 'GH_AW_PROMPT_fe5290c75c5a738f_EOF'
           </safe-output-tools>
-          GH_AW_PROMPT_81ccbf0b47e17931_EOF
+          GH_AW_PROMPT_fe5290c75c5a738f_EOF
           cat "${RUNNER_TEMP}/gh-aw/prompts/mcp_cli_tools_prompt.md"
-          cat << 'GH_AW_PROMPT_81ccbf0b47e17931_EOF'
+          cat << 'GH_AW_PROMPT_fe5290c75c5a738f_EOF'
           <github-context>
           The following GitHub context information is available for this workflow:
           {{#if github.actor}}
@@ -290,12 +296,12 @@ jobs:
           {{/if}}
           </github-context>
           
-          GH_AW_PROMPT_81ccbf0b47e17931_EOF
+          GH_AW_PROMPT_fe5290c75c5a738f_EOF
           cat "${RUNNER_TEMP}/gh-aw/prompts/github_mcp_tools_with_safeoutputs_prompt.md"
-          cat << 'GH_AW_PROMPT_81ccbf0b47e17931_EOF'
+          cat << 'GH_AW_PROMPT_fe5290c75c5a738f_EOF'
           </system>
           {{#runtime-import .github/workflows/periodic-faq.md}}
-          GH_AW_PROMPT_81ccbf0b47e17931_EOF
+          GH_AW_PROMPT_fe5290c75c5a738f_EOF
           } > "$GH_AW_PROMPT"
       - name: Interpolate variables and render templates
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
@@ -442,27 +448,27 @@ jobs:
             echo "GH_AW_SAFE_OUTPUTS_CONFIG_PATH=${RUNNER_TEMP}/gh-aw/safeoutputs/config.json"
             echo "GH_AW_SAFE_OUTPUTS_TOOLS_PATH=${RUNNER_TEMP}/gh-aw/safeoutputs/tools.json"
           } >> "$GITHUB_OUTPUT"
-      - name: Checkout repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          persist-credentials: false
-      - name: Setup Node.js
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
-        with:
-          node-version: '24'
-          package-manager-cache: false
       - name: Create gh-aw temp directory
         run: bash "${RUNNER_TEMP}/gh-aw/actions/create_gh_aw_tmp_dir.sh"
       - name: Configure gh CLI for GitHub Enterprise
         run: bash "${RUNNER_TEMP}/gh-aw/actions/configure_gh_for_ghe.sh"
         env:
           GH_TOKEN: ${{ github.token }}
+      - continue-on-error: true
+        name: Check out the FAQ repo
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3 (source v6)
+        with:
+          current: true
+          path: repos/faq-repo
+          persist-credentials: false
+          repository: adoptium/adoptium.net
       - env:
           FAQ_SINCE: ${{ github.event.inputs.since }}
           FAQ_UNTIL: ${{ github.event.inputs.until }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HAS_FAQ_TOKEN: ${{ secrets.ADOPTIUM_FAQ_TOKEN != '' }}
         name: Pre-fetch FAQ and GitHub sources
-        run: "set -euo pipefail\nDIR=/tmp/gh-aw/agent\nmkdir -p \"$DIR\"\n\n# --- Sources config (portable across projects). Read from\n# .github/faq-sources.json; fall back to the Adoptium defaults if the file\n# is missing or unparseable, so a run never hard-fails on config. ---\nCFG=\"$GITHUB_WORKSPACE/.github/faq-sources.json\"\ncfg() { jq -r \"$1\" \"$CFG\" 2>/dev/null; }\nISSUE_REPOS=(); SO_TAGS=(); MAILING_LISTS=()\nif [ -f \"$CFG\" ] && jq -e . \"$CFG\" >/dev/null 2>&1; then\n  ORG=$(cfg '.github.org')\n  SUPPORT_REPO=$(cfg '.github.support_repo')\n  PMC_LABEL=$(cfg '.github.pmc_agenda_label')\n  FAQ_URL=$(cfg '.faq_url')\n  REDDIT_QUERY=$(cfg '.reddit_query')\n  mapfile -t ISSUE_REPOS < <(cfg '.github.issue_repos[]')\n  mapfile -t SO_TAGS < <(cfg '.stackoverflow_tags[]')\n  mapfile -t MAILING_LISTS < <(cfg '.mailing_lists[]')\nfi\n: \"${ORG:=adoptium}\"\n: \"${SUPPORT_REPO:=adoptium/adoptium-support}\"\n: \"${PMC_LABEL:=PMC-agenda}\"\n: \"${FAQ_URL:=https://raw.githubusercontent.com/adoptium/adoptium.net/main/content/asciidoc-pages/docs/faq/index.adoc}\"\n: \"${REDDIT_QUERY:=temurin OR adoptium}\"\n[ \"${#ISSUE_REPOS[@]}\" -gt 0 ] || ISSUE_REPOS=(installer containers adoptium.net)\n[ \"${#SO_TAGS[@]}\" -gt 0 ] || SO_TAGS=(adoptium temurin adoptopenjdk)\n[ \"${#MAILING_LISTS[@]}\" -gt 0 ] || MAILING_LISTS=(adoptium-pmc temurin-dev)\n\n# --- Review window. Explicit since/until (workflow_dispatch inputs) mean a\n# one-off backfill; otherwise default to the past 7 days. ---\nif [ -n \"${FAQ_SINCE:-}\" ] || [ -n \"${FAQ_UNTIL:-}\" ]; then\n  MODE=backfill\n  SINCE_DAY=\"${FAQ_SINCE:-$(date -u -d '7 days ago' +%Y-%m-%d)}\"\n  UNTIL_DAY=\"${FAQ_UNTIL:-$(date -u +%Y-%m-%d)}\"\nelse\n  MODE=incremental\n  SINCE_DAY=$(date -u -d '7 days ago' +%Y-%m-%d)\n  UNTIL_DAY=$(date -u +%Y-%m-%d)\nfi\nSINCE=\"${SINCE_DAY}T00:00:00Z\"\nUNTIL=\"${UNTIL_DAY}T23:59:59Z\"\nSINCE_EPOCH=$(date -u -d \"$SINCE_DAY\" +%s)\nUNTIL_EPOCH=$(date -u -d \"${UNTIL_DAY} 23:59:59\" +%s)\necho \"$SINCE\" > \"$DIR/window-start.txt\"\necho \"$UNTIL\" > \"$DIR/window-end.txt\"\necho \"$MODE\"  > \"$DIR/window-mode.txt\"\necho \"Window: $SINCE .. $UNTIL  (mode: $MODE)\"\n\n# Live FAQ\ncurl -sSL \"$FAQ_URL\" -o \"$DIR/faq.adoc\"\n# Support repo issues (open + closed) updated in the window, authenticated\n# (5000/hr limit instead of 60). Headers as an array so the token survives\n# word splitting.\nGH_API=(-H \"Accept: application/vnd.github+json\" -H \"Authorization: Bearer $GH_TOKEN\")\ncurl -sSL \"${GH_API[@]}\" \\\n  \"https://api.github.com/repos/$SUPPORT_REPO/issues?state=open&since=$SINCE&per_page=100\" \\\n  -o \"$DIR/support-open.json\"\ncurl -sSL \"${GH_API[@]}\" \\\n  \"https://api.github.com/repos/$SUPPORT_REPO/issues?state=closed&since=$SINCE&per_page=100\" \\\n  -o \"$DIR/support-closed.json\"\n# Org-wide PMC-agenda issues via the search API (reads .items)\ncurl -sSL \"${GH_API[@]}\" \\\n  \"https://api.github.com/search/issues?q=org:$ORG+label:$PMC_LABEL+state:open&per_page=50\" \\\n  -o \"$DIR/pmc-agenda.json\"\n# Issues from other user-facing repos: install, container, and website\n# questions that never reach the support repo\nfor REPO in \"${ISSUE_REPOS[@]}\"; do\n  curl -sSL \"${GH_API[@]}\" \\\n    \"https://api.github.com/repos/$ORG/$REPO/issues?state=all&since=$SINCE&per_page=100\" \\\n    -o \"$DIR/issues-$REPO.json\"\ndone\n# GitHub Discussions across the org (GraphQL search; best effort)\ngh api graphql -f query=\"\n  query {\n    search(query: \\\"org:$ORG updated:$SINCE_DAY..$UNTIL_DAY\\\", type: DISCUSSION, first: 50) {\n      nodes { ... on Discussion {\n        title body url updatedAt repository { nameWithOwner }\n        comments(first: 10) { nodes { body } }\n      } }\n    }\n  }\" > \"$DIR/discussions.json\" \\\n  || echo '{\"data\":{\"search\":{\"nodes\":[]}}}' > \"$DIR/discussions.json\"\n# Stack Overflow questions per tag (public API; responses are always gzip,\n# hence --compressed; bounded by fromdate/todate; best effort)\nfor TAG in \"${SO_TAGS[@]}\"; do\n  curl -sSL --compressed \\\n    \"https://api.stackexchange.com/2.3/questions?order=desc&sort=creation&tagged=$TAG&site=stackoverflow&fromdate=$SINCE_EPOCH&todate=$UNTIL_EPOCH&filter=withbody\" \\\n    -o \"$DIR/so-$TAG.json\" || echo '{\"items\":[]}' > \"$DIR/so-$TAG.json\"\ndone\n# Reddit mentions (public JSON; Reddit sometimes blocks CI IPs — best effort)\nREDDIT_Q=$(jq -rn --arg q \"$REDDIT_QUERY\" '$q|@uri')\ncurl -sSL -A \"adoptium-faq-review:v1.0 (github-actions)\" \\\n  \"https://www.reddit.com/search.json?q=$REDDIT_Q&sort=new&t=week&limit=50&raw_json=1\" \\\n  -o \"$DIR/reddit.json\" || echo '{\"data\":{\"children\":[]}}' > \"$DIR/reddit.json\"\n# Mailing list archives (actual MHonArc archive pages, not the\n# accounts.eclipse.org subscription page); best effort, never fail the run.\nfor ML in \"${MAILING_LISTS[@]}\"; do\n  curl -sSL \"https://www.eclipse.org/lists/$ML/\" \\\n    -o \"$DIR/mailing-$ML.html\" || echo \"mailing list unavailable\" > \"$DIR/mailing-$ML.html\"\ndone\n# Slim the pre-fetched payloads deterministically: keep only the fields the\n# agent uses and cap long bodies. This runs for free (no inference) and\n# sharply cuts the tokens the agent must read. Field names are preserved, so\n# the documented file formats below still hold. jq failures leave the\n# original file untouched (best effort — never fail the run).\nCAP=2500\nslim() { jq \"$2\" \"$1\" > \"$1.slim\" 2>/dev/null && mv \"$1.slim\" \"$1\" || rm -f \"$1.slim\"; }\nISSUE_FILTER=\"[.[]? | {number, title, state, created_at, updated_at, html_url, labels: [.labels[]?.name], body: ((.body // \\\"\\\")[0:$CAP])}]\"\nfor f in support-open support-closed \"${ISSUE_REPOS[@]/#/issues-}\"; do\n  slim \"$DIR/$f.json\" \"$ISSUE_FILTER\"\ndone\nslim \"$DIR/pmc-agenda.json\" \"{items: [.items[]? | {number, title, state, created_at, html_url, repository_url, body: ((.body // \\\"\\\")[0:$CAP])}]}\"\nfor TAG in \"${SO_TAGS[@]}\"; do\n  slim \"$DIR/so-$TAG.json\" \"{items: [.items[]? | {question_id, title, link, creation_date, tags, body: ((.body // \\\"\\\")[0:$CAP])}]}\"\ndone\nslim \"$DIR/discussions.json\" \"{data: {search: {nodes: [.data.search.nodes[]? | {title, url, updatedAt, repository, body: ((.body // \\\"\\\")[0:$CAP]), comments: {nodes: [.comments.nodes[]? | {body: ((.body // \\\"\\\")[0:1000])}]}}]}}}\"\nslim \"$DIR/reddit.json\" \"{data: {children: [.data.children[]? | {data: {title: .data.title, subreddit: .data.subreddit, permalink: .data.permalink, created_utc: .data.created_utc, selftext: ((.data.selftext // \\\"\\\")[0:2000])}}]}}\"\n# Mailing list archives: strip HTML to plain text and cap — the raw pages\n# are mostly markup with little content. Keep the same filenames.\nfor ML in \"${MAILING_LISTS[@]}\"; do\n  M=\"mailing-$ML\"\n  if [ -f \"$DIR/$M.html\" ]; then\n    sed -e 's/<[^>]*>/ /g' \"$DIR/$M.html\" | tr -s ' \\t\\n' ' ' | cut -c1-6000 > \"$DIR/$M.txt\" 2>/dev/null \\\n      && mv \"$DIR/$M.txt\" \"$DIR/$M.html\" || rm -f \"$DIR/$M.txt\"\n  fi\ndone\necho \"Pre-fetch complete:\"; ls -la \"$DIR\"\n"
+        run: "set -euo pipefail\nDIR=/tmp/gh-aw/agent\nmkdir -p \"$DIR\"\n\n# --- Sources config (portable across projects). Read from\n# .github/faq-sources.json; fall back to the Adoptium defaults if the file\n# is missing or unparseable, so a run never hard-fails on config. ---\nCFG=\"$GITHUB_WORKSPACE/.github/faq-sources.json\"\ncfg() { jq -r \"$1\" \"$CFG\" 2>/dev/null; }\nISSUE_REPOS=(); SO_TAGS=(); MAILING_LISTS=()\nif [ -f \"$CFG\" ] && jq -e . \"$CFG\" >/dev/null 2>&1; then\n  ORG=$(cfg '.github.org')\n  SUPPORT_REPO=$(cfg '.github.support_repo')\n  PMC_LABEL=$(cfg '.github.pmc_agenda_label')\n  FAQ_URL=$(cfg '.faq_url')\n  REDDIT_QUERY=$(cfg '.reddit_query')\n  mapfile -t ISSUE_REPOS < <(cfg '.github.issue_repos[]')\n  mapfile -t SO_TAGS < <(cfg '.stackoverflow_tags[]')\n  mapfile -t MAILING_LISTS < <(cfg '.mailing_lists[]')\nfi\n: \"${ORG:=adoptium}\"\n: \"${SUPPORT_REPO:=adoptium/adoptium-support}\"\n: \"${PMC_LABEL:=PMC-agenda}\"\n: \"${FAQ_URL:=https://raw.githubusercontent.com/adoptium/adoptium.net/main/content/asciidoc-pages/docs/faq/index.adoc}\"\n: \"${REDDIT_QUERY:=temurin OR adoptium}\"\n[ \"${#ISSUE_REPOS[@]}\" -gt 0 ] || ISSUE_REPOS=(installer containers adoptium.net)\n[ \"${#SO_TAGS[@]}\" -gt 0 ] || SO_TAGS=(adoptium temurin adoptopenjdk)\n[ \"${#MAILING_LISTS[@]}\" -gt 0 ] || MAILING_LISTS=(adoptium-pmc temurin-dev)\nFAQ_REPO=$(cfg '.faq_repo'); : \"${FAQ_REPO:=adoptium/adoptium.net}\"\nFAQ_PATH=$(cfg '.faq_path'); : \"${FAQ_PATH:=content/asciidoc-pages/docs/faq/index.adoc}\"\n\n# --- Output mode. If ADOPTIUM_FAQ_TOKEN is configured, the FAQ repo was\n# checked out (previous step) and the agent opens a draft PR editing the\n# FAQ; otherwise it falls back to filing an issue in this repo. Only the\n# boolean presence of the token is used here, never its value. ---\nif [ \"${HAS_FAQ_TOKEN:-false}\" = \"true\" ]; then\n  echo \"pr\" > \"$DIR/output-mode.txt\"\n  echo \"repos/faq-repo/$FAQ_PATH\" > \"$DIR/faq-edit-path.txt\"\n  echo \"$FAQ_REPO\" > \"$DIR/faq-target-repo.txt\"\nelse\n  echo \"issue\" > \"$DIR/output-mode.txt\"\nfi\necho \"Output mode: $(cat \"$DIR/output-mode.txt\")\"\n\n# --- Review window. Explicit since/until (workflow_dispatch inputs) mean a\n# one-off backfill; otherwise default to the past 7 days. ---\nif [ -n \"${FAQ_SINCE:-}\" ] || [ -n \"${FAQ_UNTIL:-}\" ]; then\n  MODE=backfill\n  SINCE_DAY=\"${FAQ_SINCE:-$(date -u -d '7 days ago' +%Y-%m-%d)}\"\n  UNTIL_DAY=\"${FAQ_UNTIL:-$(date -u +%Y-%m-%d)}\"\nelse\n  MODE=incremental\n  SINCE_DAY=$(date -u -d '7 days ago' +%Y-%m-%d)\n  UNTIL_DAY=$(date -u +%Y-%m-%d)\nfi\nSINCE=\"${SINCE_DAY}T00:00:00Z\"\nUNTIL=\"${UNTIL_DAY}T23:59:59Z\"\nSINCE_EPOCH=$(date -u -d \"$SINCE_DAY\" +%s)\nUNTIL_EPOCH=$(date -u -d \"${UNTIL_DAY} 23:59:59\" +%s)\necho \"$SINCE\" > \"$DIR/window-start.txt\"\necho \"$UNTIL\" > \"$DIR/window-end.txt\"\necho \"$MODE\"  > \"$DIR/window-mode.txt\"\necho \"Window: $SINCE .. $UNTIL  (mode: $MODE)\"\n\n# Live FAQ\ncurl -sSL \"$FAQ_URL\" -o \"$DIR/faq.adoc\"\n# Support repo issues (open + closed) updated in the window, authenticated\n# (5000/hr limit instead of 60). Headers as an array so the token survives\n# word splitting.\nGH_API=(-H \"Accept: application/vnd.github+json\" -H \"Authorization: Bearer $GH_TOKEN\")\ncurl -sSL \"${GH_API[@]}\" \\\n  \"https://api.github.com/repos/$SUPPORT_REPO/issues?state=open&since=$SINCE&per_page=100\" \\\n  -o \"$DIR/support-open.json\"\ncurl -sSL \"${GH_API[@]}\" \\\n  \"https://api.github.com/repos/$SUPPORT_REPO/issues?state=closed&since=$SINCE&per_page=100\" \\\n  -o \"$DIR/support-closed.json\"\n# Org-wide PMC-agenda issues via the search API (reads .items)\ncurl -sSL \"${GH_API[@]}\" \\\n  \"https://api.github.com/search/issues?q=org:$ORG+label:$PMC_LABEL+state:open&per_page=50\" \\\n  -o \"$DIR/pmc-agenda.json\"\n# Issues from other user-facing repos: install, container, and website\n# questions that never reach the support repo\nfor REPO in \"${ISSUE_REPOS[@]}\"; do\n  curl -sSL \"${GH_API[@]}\" \\\n    \"https://api.github.com/repos/$ORG/$REPO/issues?state=all&since=$SINCE&per_page=100\" \\\n    -o \"$DIR/issues-$REPO.json\"\ndone\n# GitHub Discussions across the org (GraphQL search; best effort)\ngh api graphql -f query=\"\n  query {\n    search(query: \\\"org:$ORG updated:$SINCE_DAY..$UNTIL_DAY\\\", type: DISCUSSION, first: 50) {\n      nodes { ... on Discussion {\n        title body url updatedAt repository { nameWithOwner }\n        comments(first: 10) { nodes { body } }\n      } }\n    }\n  }\" > \"$DIR/discussions.json\" \\\n  || echo '{\"data\":{\"search\":{\"nodes\":[]}}}' > \"$DIR/discussions.json\"\n# Stack Overflow questions per tag (public API; responses are always gzip,\n# hence --compressed; bounded by fromdate/todate; best effort)\nfor TAG in \"${SO_TAGS[@]}\"; do\n  curl -sSL --compressed \\\n    \"https://api.stackexchange.com/2.3/questions?order=desc&sort=creation&tagged=$TAG&site=stackoverflow&fromdate=$SINCE_EPOCH&todate=$UNTIL_EPOCH&filter=withbody\" \\\n    -o \"$DIR/so-$TAG.json\" || echo '{\"items\":[]}' > \"$DIR/so-$TAG.json\"\ndone\n# Reddit mentions (public JSON; Reddit sometimes blocks CI IPs — best effort)\nREDDIT_Q=$(jq -rn --arg q \"$REDDIT_QUERY\" '$q|@uri')\ncurl -sSL -A \"adoptium-faq-review:v1.0 (github-actions)\" \\\n  \"https://www.reddit.com/search.json?q=$REDDIT_Q&sort=new&t=week&limit=50&raw_json=1\" \\\n  -o \"$DIR/reddit.json\" || echo '{\"data\":{\"children\":[]}}' > \"$DIR/reddit.json\"\n# Mailing list archives (actual MHonArc archive pages, not the\n# accounts.eclipse.org subscription page); best effort, never fail the run.\nfor ML in \"${MAILING_LISTS[@]}\"; do\n  curl -sSL \"https://www.eclipse.org/lists/$ML/\" \\\n    -o \"$DIR/mailing-$ML.html\" || echo \"mailing list unavailable\" > \"$DIR/mailing-$ML.html\"\ndone\n# Slim the pre-fetched payloads deterministically: keep only the fields the\n# agent uses and cap long bodies. This runs for free (no inference) and\n# sharply cuts the tokens the agent must read. Field names are preserved, so\n# the documented file formats below still hold. jq failures leave the\n# original file untouched (best effort — never fail the run).\nCAP=2500\nslim() { jq \"$2\" \"$1\" > \"$1.slim\" 2>/dev/null && mv \"$1.slim\" \"$1\" || rm -f \"$1.slim\"; }\nISSUE_FILTER=\"[.[]? | {number, title, state, created_at, updated_at, html_url, labels: [.labels[]?.name], body: ((.body // \\\"\\\")[0:$CAP])}]\"\nfor f in support-open support-closed \"${ISSUE_REPOS[@]/#/issues-}\"; do\n  slim \"$DIR/$f.json\" \"$ISSUE_FILTER\"\ndone\nslim \"$DIR/pmc-agenda.json\" \"{items: [.items[]? | {number, title, state, created_at, html_url, repository_url, body: ((.body // \\\"\\\")[0:$CAP])}]}\"\nfor TAG in \"${SO_TAGS[@]}\"; do\n  slim \"$DIR/so-$TAG.json\" \"{items: [.items[]? | {question_id, title, link, creation_date, tags, body: ((.body // \\\"\\\")[0:$CAP])}]}\"\ndone\nslim \"$DIR/discussions.json\" \"{data: {search: {nodes: [.data.search.nodes[]? | {title, url, updatedAt, repository, body: ((.body // \\\"\\\")[0:$CAP]), comments: {nodes: [.comments.nodes[]? | {body: ((.body // \\\"\\\")[0:1000])}]}}]}}}\"\nslim \"$DIR/reddit.json\" \"{data: {children: [.data.children[]? | {data: {title: .data.title, subreddit: .data.subreddit, permalink: .data.permalink, created_utc: .data.created_utc, selftext: ((.data.selftext // \\\"\\\")[0:2000])}}]}}\"\n# Mailing list archives: strip HTML to plain text and cap — the raw pages\n# are mostly markup with little content. Keep the same filenames.\nfor ML in \"${MAILING_LISTS[@]}\"; do\n  M=\"mailing-$ML\"\n  if [ -f \"$DIR/$M.html\" ]; then\n    sed -e 's/<[^>]*>/ /g' \"$DIR/$M.html\" | tr -s ' \\t\\n' ' ' | cut -c1-6000 > \"$DIR/$M.txt\" 2>/dev/null \\\n      && mv \"$DIR/$M.txt\" \"$DIR/$M.html\" || rm -f \"$DIR/$M.txt\"\n  fi\ndone\necho \"Pre-fetch complete:\"; ls -la \"$DIR\"\n"
 
       # Cache memory file share configuration from frontmatter processed below
       - name: Create cache-memory directory
@@ -539,21 +545,29 @@ jobs:
       - name: Download container images
         run: bash "${RUNNER_TEMP}/gh-aw/actions/download_docker_images.sh" ghcr.io/github/gh-aw-firewall/agent:0.27.11@sha256:979723c628182da7729333f2208bb249fd25ddee579645cf9a3892d681a929c7 ghcr.io/github/gh-aw-firewall/api-proxy:0.27.11@sha256:807e4831999b44513b0a66e5859d478dc4da7ae74ab1918cec967d513f95bf9d ghcr.io/github/gh-aw-firewall/squid:0.27.11@sha256:ff27ea0525ad953a6adee28a5fbe9d2e22be47dbec755c15767af4ea3f91df7d ghcr.io/github/gh-aw-mcpg:v0.3.30@sha256:35625d1a2269b1238606078c879f59a91cffc4ac33eb54bf39c6418822c1a8be ghcr.io/github/gh-aw-node@sha256:529d02eb970b1161aa25c593a9c3df57fdfad5a8add328cb3b6eccef66f3183b ghcr.io/github/github-mcp-server:v1.4.0@sha256:2afb26356481d1a350e14544a6e160f7f7ec1561a1ea309b823665abf0309036 node:lts-alpine@sha256:2bdb65ed1dab192432bc31c95f94155ca5ad7fc1392fb7eb7526ab682fa5bf14
       - name: Generate Safe Outputs Config
+        env:
+          GH_AW_SECRET_ADOPTIUM_FAQ_TOKEN: ${{ secrets.ADOPTIUM_FAQ_TOKEN }}
         run: |
           mkdir -p "${RUNNER_TEMP}/gh-aw/safeoutputs"
           mkdir -p /tmp/gh-aw/safeoutputs
           mkdir -p /tmp/gh-aw/mcp-logs/safeoutputs
-          cat > "${RUNNER_TEMP}/gh-aw/safeoutputs/config.json" << 'GH_AW_SAFE_OUTPUTS_CONFIG_abf8aa91da7176c9_EOF'
-          {"create_issue":{"labels":["documentation","faq"],"max":1,"title_prefix":"[faq-review] "},"create_report_incomplete_issue":{},"missing_data":{},"missing_tool":{},"noop":{"max":1,"report-as-issue":"true"},"report_incomplete":{}}
-          GH_AW_SAFE_OUTPUTS_CONFIG_abf8aa91da7176c9_EOF
+          cat > "${RUNNER_TEMP}/gh-aw/safeoutputs/config.json" << 'GH_AW_SAFE_OUTPUTS_CONFIG_916b85ee3fe42b87_EOF'
+          {"create_issue":{"labels":["documentation","faq"],"max":1,"title_prefix":"[faq-review] "},"create_pull_request":{"allowed_repos":["adoptium/adoptium.net"],"base_branch":"main","github-token":"${GH_AW_SECRET_ADOPTIUM_FAQ_TOKEN}","labels":["documentation","faq"],"max":1,"max_patch_files":100,"max_patch_size":4096,"protect_top_level_dot_folders":true,"protected_files":["package.json","bun.lockb","bunfig.toml","deno.json","deno.jsonc","deno.lock","global.json","NuGet.Config","Directory.Packages.props","mix.exs","mix.lock","go.mod","go.sum","stack.yaml","stack.yaml.lock","pom.xml","build.gradle","build.gradle.kts","settings.gradle","settings.gradle.kts","gradle.properties","package-lock.json","yarn.lock","pnpm-lock.yaml","npm-shrinkwrap.json","requirements.txt","Pipfile","Pipfile.lock","pyproject.toml","setup.py","setup.cfg","Gemfile","Gemfile.lock","uv.lock","CODEOWNERS","DESIGN.md","README.md","CONTRIBUTING.md","CHANGELOG.md","SECURITY.md","CODE_OF_CONDUCT.md","AGENTS.md","CLAUDE.md","GEMINI.md"],"protected_files_policy":"request_review","target-repo":"adoptium/adoptium.net","title_prefix":"[faq-review] "},"create_report_incomplete_issue":{},"missing_data":{},"missing_tool":{},"noop":{"max":1,"report-as-issue":"true"},"report_incomplete":{}}
+          GH_AW_SAFE_OUTPUTS_CONFIG_916b85ee3fe42b87_EOF
       - name: Generate Safe Outputs Tools
         env:
           GH_AW_TOOLS_META_JSON: |
             {
               "description_suffixes": {
-                "create_issue": " CONSTRAINTS: Maximum 1 issue(s) can be created. Title will be prefixed with \"[faq-review] \". Labels [\"documentation\" \"faq\"] will be automatically added."
+                "create_issue": " CONSTRAINTS: Maximum 1 issue(s) can be created. Title will be prefixed with \"[faq-review] \". Labels [\"documentation\" \"faq\"] will be automatically added.",
+                "create_pull_request": " CONSTRAINTS: Maximum 1 pull request(s) can be created. Title will be prefixed with \"[faq-review] \". Labels [\"documentation\" \"faq\"] will be automatically added."
               },
-              "repo_params": {},
+              "repo_params": {
+                "create_pull_request": {
+                  "description": "Target repository for this operation in 'owner/repo' format. Default is \"adoptium/adoptium.net\". Must be the target-repo or in the allowed-repos list.",
+                  "type": "string"
+                }
+              },
               "dynamic_tools": []
             }
           GH_AW_VALIDATION_JSON: |
@@ -586,6 +600,47 @@ jobs:
                   },
                   "temporary_id": {
                     "type": "string"
+                  },
+                  "title": {
+                    "required": true,
+                    "type": "string",
+                    "sanitize": true,
+                    "maxLength": 128
+                  }
+                }
+              },
+              "create_pull_request": {
+                "defaultMax": 1,
+                "fields": {
+                  "base": {
+                    "type": "string",
+                    "sanitize": true,
+                    "maxLength": 128
+                  },
+                  "body": {
+                    "required": true,
+                    "type": "string",
+                    "sanitize": true,
+                    "maxLength": 65000
+                  },
+                  "branch": {
+                    "required": true,
+                    "type": "string",
+                    "sanitize": true,
+                    "maxLength": 256
+                  },
+                  "draft": {
+                    "type": "boolean"
+                  },
+                  "labels": {
+                    "type": "array",
+                    "itemType": "string",
+                    "itemSanitize": true,
+                    "itemMaxLength": 128
+                  },
+                  "repo": {
+                    "type": "string",
+                    "maxLength": 256
                   },
                   "title": {
                     "required": true,
@@ -927,7 +982,8 @@ jobs:
             const { main } = require('${{ runner.temp }}/gh-aw/actions/redact_secrets.cjs');
             await main();
         env:
-          GH_AW_SECRET_NAMES: 'GH_AW_GITHUB_MCP_SERVER_TOKEN,GH_AW_GITHUB_TOKEN,GITHUB_TOKEN,SLACK_BOT_TOKEN,SLACK_TEAM_ID'
+          GH_AW_SECRET_NAMES: 'ADOPTIUM_FAQ_TOKEN,GH_AW_GITHUB_MCP_SERVER_TOKEN,GH_AW_GITHUB_TOKEN,GITHUB_TOKEN,SLACK_BOT_TOKEN,SLACK_TEAM_ID'
+          SECRET_ADOPTIUM_FAQ_TOKEN: ${{ secrets.ADOPTIUM_FAQ_TOKEN }}
           SECRET_GH_AW_GITHUB_MCP_SERVER_TOKEN: ${{ secrets.GH_AW_GITHUB_MCP_SERVER_TOKEN }}
           SECRET_GH_AW_GITHUB_TOKEN: ${{ secrets.GH_AW_GITHUB_TOKEN }}
           SECRET_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -1076,8 +1132,9 @@ jobs:
       needs.activation.outputs.stale_lock_file_failed == 'true' || needs.activation.outputs.daily_ai_credits_exceeded == 'true')
     runs-on: ubuntu-slim
     permissions:
-      contents: read
+      contents: write
       issues: write
+      pull-requests: write
     concurrency:
       group: "gh-aw-conclusion-periodic-faq"
       cancel-in-progress: false
@@ -1294,6 +1351,8 @@ jobs:
           GH_AW_AGENTIC_ENGINE_TIMEOUT: ${{ needs.agent.outputs.agentic_engine_timeout }}
           GH_AW_MODEL_NOT_SUPPORTED_ERROR: ${{ needs.agent.outputs.model_not_supported_error }}
           GH_AW_ENGINE_API_HOSTS: "api.enterprise.githubcopilot.com,api.githubcopilot.com,api.business.githubcopilot.com,api.individual.githubcopilot.com"
+          GH_AW_CODE_PUSH_FAILURE_ERRORS: ${{ needs.safe_outputs.outputs.code_push_failure_errors }}
+          GH_AW_CODE_PUSH_FAILURE_COUNT: ${{ needs.safe_outputs.outputs.code_push_failure_count }}
           GH_AW_LOCKDOWN_CHECK_FAILED: ${{ needs.activation.outputs.lockdown_check_failed }}
           GH_AW_STALE_LOCK_FILE_FAILED: ${{ needs.activation.outputs.stale_lock_file_failed }}
           GH_AW_DAILY_AI_CREDITS_EXCEEDED: ${{ needs.activation.outputs.daily_ai_credits_exceeded }}
@@ -1571,8 +1630,9 @@ jobs:
     if: (!cancelled()) && needs.agent.result != 'skipped' && needs.detection.result == 'success'
     runs-on: ubuntu-slim
     permissions:
-      contents: read
+      contents: write
       issues: write
+      pull-requests: write
     timeout-minutes: 45
     env:
       GH_AW_AGENT_AIC: ${{ needs.agent.outputs.aic }}
@@ -1597,6 +1657,8 @@ jobs:
       create_discussion_errors: ${{ steps.process_safe_outputs.outputs.create_discussion_errors }}
       created_issue_number: ${{ steps.process_safe_outputs.outputs.created_issue_number }}
       created_issue_url: ${{ steps.process_safe_outputs.outputs.created_issue_url }}
+      created_pr_number: ${{ steps.process_safe_outputs.outputs.created_pr_number }}
+      created_pr_url: ${{ steps.process_safe_outputs.outputs.created_pr_url }}
       process_safe_outputs_processed_count: ${{ steps.process_safe_outputs.outputs.processed_count }}
       process_safe_outputs_temporary_id_map: ${{ steps.process_safe_outputs.outputs.temporary_id_map }}
     steps:
@@ -1628,6 +1690,25 @@ jobs:
           mkdir -p /tmp/gh-aw/
           find "/tmp/gh-aw/" -type f -print
           echo "GH_AW_AGENT_OUTPUT=/tmp/gh-aw/agent_output.json" >> "$GITHUB_OUTPUT"
+      - name: Download patch artifact
+        continue-on-error: true
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: agent
+          path: /tmp/gh-aw/
+      - name: Checkout repository
+        if: (!cancelled()) && needs.agent.result != 'skipped' && contains(needs.agent.outputs.output_types, 'create_pull_request')
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: true
+          token: ${{ secrets.ADOPTIUM_FAQ_TOKEN }}
+      - name: Configure Git credentials
+        if: (!cancelled()) && needs.agent.result != 'skipped' && contains(needs.agent.outputs.output_types, 'create_pull_request')
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_SERVER_URL: ${{ github.server_url }}
+          GIT_TOKEN: ${{ secrets.ADOPTIUM_FAQ_TOKEN }}
+        run: bash "${RUNNER_TEMP}/gh-aw/actions/configure_git_credentials.sh"
       - name: Configure GH_HOST for enterprise compatibility
         id: ghes-host-config
         shell: bash
@@ -1646,7 +1727,9 @@ jobs:
           GH_AW_ALLOWED_DOMAINS: "*.githubusercontent.com,*.slack.com,api.business.githubcopilot.com,api.enterprise.githubcopilot.com,api.github.com,api.githubcopilot.com,api.individual.githubcopilot.com,api.npms.io,api.snapcraft.io,api.stackexchange.com,archive.ubuntu.com,azure.archive.ubuntu.com,bun.sh,cdn.jsdelivr.net,codeload.github.com,crl.geotrust.com,crl.globalsign.com,crl.identrust.com,crl.sectigo.com,crl.thawte.com,crl.usertrust.com,crl.verisign.com,crl3.digicert.com,crl4.digicert.com,crls.ssl.com,deb.nodesource.com,deno.land,docs.github.com,esm.sh,get.pnpm.io,github-cloud.githubusercontent.com,github-cloud.s3.amazonaws.com,github.blog,github.com,github.githubassets.com,googleapis.deno.dev,googlechromelabs.github.io,host.docker.internal,json-schema.org,json.schemastore.org,jsr.io,keyserver.ubuntu.com,lfs.github.com,nodejs.org,npm.pkg.github.com,npmjs.com,npmjs.org,objects.githubusercontent.com,ocsp.digicert.com,ocsp.geotrust.com,ocsp.globalsign.com,ocsp.identrust.com,ocsp.sectigo.com,ocsp.ssl.com,ocsp.thawte.com,ocsp.usertrust.com,ocsp.verisign.com,packagecloud.io,packages.cloud.google.com,packages.microsoft.com,patch-diff.githubusercontent.com,ppa.launchpad.net,raw.githubusercontent.com,registry.bower.io,registry.npmjs.com,registry.npmjs.org,registry.yarnpkg.com,repo.yarnpkg.com,s.symcb.com,s.symcd.com,security.ubuntu.com,skimdb.npmjs.com,slack.com,storage.googleapis.com,telemetry.enterprise.githubcopilot.com,telemetry.vercel.com,ts-crl.ws.symantec.com,ts-ocsp.ws.symantec.com,www.eclipse.org,www.googleapis.com,www.npmjs.com,www.npmjs.org,www.reddit.com,yarnpkg.com"
           GITHUB_SERVER_URL: ${{ github.server_url }}
           GITHUB_API_URL: ${{ github.api_url }}
-          GH_AW_SAFE_OUTPUTS_HANDLER_CONFIG: "{\"create_issue\":{\"labels\":[\"documentation\",\"faq\"],\"max\":1,\"title_prefix\":\"[faq-review] \"},\"create_report_incomplete_issue\":{},\"missing_data\":{},\"missing_tool\":{},\"noop\":{\"max\":1,\"report-as-issue\":\"true\"},\"report_incomplete\":{}}"
+          GH_AW_SAFE_OUTPUTS_HANDLER_CONFIG: "{\"create_issue\":{\"labels\":[\"documentation\",\"faq\"],\"max\":1,\"title_prefix\":\"[faq-review] \"},\"create_pull_request\":{\"allowed_repos\":[\"adoptium/adoptium.net\"],\"base_branch\":\"main\",\"github-token\":\"${{ secrets.ADOPTIUM_FAQ_TOKEN }}\",\"labels\":[\"documentation\",\"faq\"],\"max\":1,\"max_patch_files\":100,\"max_patch_size\":4096,\"protect_top_level_dot_folders\":true,\"protected_files\":[\"package.json\",\"bun.lockb\",\"bunfig.toml\",\"deno.json\",\"deno.jsonc\",\"deno.lock\",\"global.json\",\"NuGet.Config\",\"Directory.Packages.props\",\"mix.exs\",\"mix.lock\",\"go.mod\",\"go.sum\",\"stack.yaml\",\"stack.yaml.lock\",\"pom.xml\",\"build.gradle\",\"build.gradle.kts\",\"settings.gradle\",\"settings.gradle.kts\",\"gradle.properties\",\"package-lock.json\",\"yarn.lock\",\"pnpm-lock.yaml\",\"npm-shrinkwrap.json\",\"requirements.txt\",\"Pipfile\",\"Pipfile.lock\",\"pyproject.toml\",\"setup.py\",\"setup.cfg\",\"Gemfile\",\"Gemfile.lock\",\"uv.lock\",\"CODEOWNERS\",\"DESIGN.md\",\"README.md\",\"CONTRIBUTING.md\",\"CHANGELOG.md\",\"SECURITY.md\",\"CODE_OF_CONDUCT.md\",\"AGENTS.md\",\"CLAUDE.md\",\"GEMINI.md\"],\"protected_files_policy\":\"request_review\",\"target-repo\":\"adoptium/adoptium.net\",\"title_prefix\":\"[faq-review] \"},\"create_report_incomplete_issue\":{},\"missing_data\":{},\"missing_tool\":{},\"noop\":{\"max\":1,\"report-as-issue\":\"true\"},\"report_incomplete\":{}}"
+          GH_AW_CI_TRIGGER_TOKEN: ${{ secrets.GH_AW_CI_TRIGGER_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ADOPTIUM_FAQ_TOKEN }}
         with:
           github-token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
