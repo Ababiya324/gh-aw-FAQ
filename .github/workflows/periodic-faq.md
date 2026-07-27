@@ -211,6 +211,21 @@ mcp-servers:
       - slack_get_channel_history
       - slack_get_thread_replies
 safe-outputs:
+  # Preserve source links to these domains in the output (GitHub is allowed by
+  # default) so maintainers can click through and verify every proposal. Without
+  # this, gh-aw redacts non-GitHub URLs to "(domain/redacted)".
+  allowed-domains:
+    - adoptium.net
+    - openjdk.org
+    - bugs.openjdk.org
+    - www.gnu.org
+    - gnu.org
+    - stackoverflow.com
+    - www.eclipse.org
+    - eclipse.org
+    - www.reddit.com
+    - reddit.com
+    - adoptium.slack.com
   # Fallback (issue mode): filed in this repo with the default token.
   create-issue:
     title-prefix: "[faq-review] "
@@ -430,6 +445,10 @@ Where users consistently struggled to find answers.
 - Prefer official maintainer answers over community speculation.
 - Focus on recurring or broadly useful questions, not one-offs.
 - Never duplicate an existing entry; compare against `faq.adoc` first.
-- Include source links wherever possible.
+- Every proposal MUST carry at least one verifiable source link so a maintainer
+  can double-check it: the GitHub issue/PR/discussion URL, the Stack Overflow /
+  Reddit / mailing-list URL, or the Slack thread permalink. Use the real URLs from
+  the pre-fetched data — never a placeholder or a bare domain. If the only source
+  is a Slack thread, give its permalink (and channel + approximate time as backup).
 - Exactly one safe output per run — one draft PR **or** one issue, or a `noop`.
   Never neither, never more than one.
