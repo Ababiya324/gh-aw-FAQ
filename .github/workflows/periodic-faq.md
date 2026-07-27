@@ -59,15 +59,23 @@ steps:
       # --- Sources config (portable across projects). Read from
       # .github/faq-sources.json; fall back to the Adoptium defaults if the file
       # is missing or unparseable, so a run never hard-fails on config. ---
-      CFG="$GITHUB_WORKSPACE/.github/faq-sources.json"
-      cfg() { jq -r "$1" "$CFG" 2>/dev/null; }
+      # Config may live at the workspace root, or elsewhere if another checkout
+      # is marked current: true — search a couple of stable locations. cfg never
+      # fails (|| true) so a missing/invalid file can't kill the run under set -e.
+      CFG=""
+      for c in "$GITHUB_WORKSPACE/.github/faq-sources.json" "$GITHUB_WORKSPACE/../.github/faq-sources.json" ".github/faq-sources.json"; do
+        if [ -f "$c" ]; then CFG="$c"; break; fi
+      done
+      cfg() { [ -n "$CFG" ] && jq -r "$1" "$CFG" 2>/dev/null || true; }
       ISSUE_REPOS=(); SO_TAGS=(); MAILING_LISTS=()
-      if [ -f "$CFG" ] && jq -e . "$CFG" >/dev/null 2>&1; then
+      if [ -n "$CFG" ] && jq -e . "$CFG" >/dev/null 2>&1; then
         ORG=$(cfg '.github.org')
         SUPPORT_REPO=$(cfg '.github.support_repo')
         PMC_LABEL=$(cfg '.github.pmc_agenda_label')
         FAQ_URL=$(cfg '.faq_url')
         REDDIT_QUERY=$(cfg '.reddit_query')
+        FAQ_REPO=$(cfg '.faq_repo')
+        FAQ_PATH=$(cfg '.faq_path')
         mapfile -t ISSUE_REPOS < <(cfg '.github.issue_repos[]')
         mapfile -t SO_TAGS < <(cfg '.stackoverflow_tags[]')
         mapfile -t MAILING_LISTS < <(cfg '.mailing_lists[]')
@@ -80,8 +88,8 @@ steps:
       [ "${#ISSUE_REPOS[@]}" -gt 0 ] || ISSUE_REPOS=(installer containers adoptium.net)
       [ "${#SO_TAGS[@]}" -gt 0 ] || SO_TAGS=(adoptium temurin adoptopenjdk)
       [ "${#MAILING_LISTS[@]}" -gt 0 ] || MAILING_LISTS=(adoptium-pmc temurin-dev)
-      FAQ_REPO=$(cfg '.faq_repo'); : "${FAQ_REPO:=adoptium/adoptium.net}"
-      FAQ_PATH=$(cfg '.faq_path'); : "${FAQ_PATH:=content/asciidoc-pages/docs/faq/index.adoc}"
+      : "${FAQ_REPO:=adoptium/adoptium.net}"
+      : "${FAQ_PATH:=content/asciidoc-pages/docs/faq/index.adoc}"
 
       # --- Output mode. If ADOPTIUM_FAQ_TOKEN is configured, the FAQ repo was
       # checked out (previous step) and the agent opens a draft PR editing the
